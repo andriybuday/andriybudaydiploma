@@ -2,20 +2,11 @@
 
 namespace Som.Topology
 {
-    public class GaussNeighbourhoodFunction : NeighbourhoodFunctionBase
+    public class GaussNeighbourhoodFunction : INeighbourhoodFunction
     {
-        public double Radius { get; private set; }
-
-
-        public GaussNeighbourhoodFunction(double radius)
-            : base(new double[]{radius})
+        public double GetDistanceFalloff(double distance, double radius)
         {
-            Radius = radius;
-        }
-
-        public override double GetResult(double distance)
-        {
-            double denominator = 2 * Parameters[0] * Parameters[0];
+            double denominator = 2 * radius * radius;
             return Math.Exp(-(distance * distance / denominator));
         }
     }

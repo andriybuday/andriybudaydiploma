@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Som.Network;
+using Som.Topology;
 
 namespace Som.Application.Grid
 {
@@ -13,30 +15,36 @@ namespace Som.Application.Grid
         public int DotSize { get; private set; }
         public int HalfDotSize { get; private set; }
 
+        public ITopology Topology { get; private set; }
+        public Image BackGroundImage { get; set; }
         public GridConnDrawer()
         {
             DotBrush = Brushes.Red;
-            DotSize = 2;
+            DotSize = 4;
             HalfDotSize = DotSize/2;
             LinePen = new Pen(Color.Black, DotSize-2 > 1 ? DotSize-2 : 1);
         }
 
         public void Draw(Graphics graphics, int width, int height)
         {
-            if (LastRunPoints == null) return;
+            if (LastRunNeurons == null) return;
 
             int scaling = width < height ? width : height;
-            
-            this.Draw(graphics, scaling, LastRunPoints);
+
+          
+            this.Draw(graphics, scaling, LastRunNeurons);
         }
 
-        protected List<List<double>> LastRunPoints { get; set; }
+        public IList<INeuron> LastRunNeurons { get; set; }
 
-        public void Draw(Graphics g, int scalingSize, List<List<double>> points)
+        public void Draw(Graphics g, int scalingSize, IList<INeuron> neurons)
         {
-            LastRunPoints = points;
+            LastRunNeurons = neurons;
+            var points = neurons.Select(x => x.Weights.ToList()).ToList();
 
-            g.Clear(Color.White);
+            InitializeTopology(neurons.Count);
+
+            ClearDrawingSurface(g);
 
             if(scalingSize < 10 || scalingSize > 2000) throw new ArgumentException("scalingSize for drawing should be in (10;2000)");
             foreach (List<double> point in points)
@@ -49,11 +57,9 @@ namespace Som.Application.Grid
             
             // this is O(N^2), but come on.. this is just drawing...            
 
-            double[,] distMatrix = FillInCacheMatrix(points);
-
             for (int i = 0; i < points.Count; i++)
             {
-                List<int> neiboPoints = FindFourNeighborhoodPoints(i, distMatrix);
+                var neiboPoints = Topology.GetDirectlyConnectedNeurons(i);
 
                 foreach (var neiboPointInd in neiboPoints)
                 {
@@ -63,10 +69,25 @@ namespace Som.Application.Grid
 
             foreach (List<double> point in points)
             {
-               DrawDot(g, point, scalingSize);
+               DrawDot(g, DotBrush, point, scalingSize);
             }
         }
 
+        private void ClearDrawingSurface(Graphics g)
+        {
+            g.Clear(Color.White);
+
+            if (BackGroundImage != null)
+            {
+                g.DrawImage(BackGroundImage, 0, 0);
+            }
+        }
+
+        private void InitializeTopology(int count)
+        {
+            var n = (int)Math.Sqrt(count);
+            Topology = new SimpleMatrixTopology(n, n);
+        }
 
 
         private double[,] FillInCacheMatrix(List<List<double>> points)
@@ -99,7 +120,7 @@ namespace Som.Application.Grid
             var n = (int)Math.Sqrt(distances.Length);
 
             //suppose they are sorderd by increasing distance...
-            var result = new List<int>() {0, 0, 0, 0};
+            var result = new List<int>() {0, 1, 2, 3};
 
             for (int i = 0; i < n; i++)
             {
@@ -136,12 +157,12 @@ namespace Som.Application.Grid
             return result;
         }
 
-        private void DrawDot(Graphics graphics, List<double> point, int scalingSize)
+        private void DrawDot(Graphics graphics, Brush brush, List<double> point, int scalingSize)
         {
             float x1 = Scale(point[0], scalingSize);
             float y1 = Scale(point[1], scalingSize);
 
-            graphics.FillEllipse(DotBrush, x1 - HalfDotSize, y1 - HalfDotSize, DotSize, DotSize);
+            graphics.FillEllipse(brush, x1 - HalfDotSize, y1 - HalfDotSize, DotSize, DotSize);
         }
 
         private void DrawConnectionLine(Graphics graphics, List<double> point, List<double> neiboPoint, int scalingSize)

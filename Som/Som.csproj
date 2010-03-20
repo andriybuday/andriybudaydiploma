@@ -84,7 +84,9 @@
     <Compile Include="Network\INeuron.cs" />
     <Compile Include="Network\NetworkBase.cs" />
     <Compile Include="Network\NeuronBase.cs" />
+    <Compile Include="Topology\DefaultRadiusProvider.cs" />
     <Compile Include="Topology\GaussNeighbourhoodFunction.cs" />
+    <Compile Include="Topology\IRadiusProvider.cs" />
     <Compile Include="Topology\ITopology.cs" />
     <Compile Include="Topology\Location.cs" />
     <Compile Include="Topology\BoundMatrixTopology.cs" />

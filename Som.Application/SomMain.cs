@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Som.Application.Base;
+using Som.Application.Clusterization;
 using Som.Application.Grid;
 
 namespace Som.Application
@@ -25,7 +26,12 @@ namespace Som.Application
 
         private void SomMain_Shown(object sender, EventArgs e)
         {
-            ScreenLauncher.LaunchScreen<GridController>();
+            //ScreenLauncher.LaunchScreen<GridController>();
+        }
+
+        private void buttonAnimalsClusterization_Click(object sender, EventArgs e)
+        {
+            ScreenLauncher.LaunchScreen<AnimalsClusterizationController>();
         }
     }
 }

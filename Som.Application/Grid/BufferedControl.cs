@@ -15,16 +15,22 @@ namespace Som.Application.Grid
 
         public BufferedControl()
         {
-        }
-
-        public BufferedControl(IBufferedControlController controller)
-        {
-            Controller = controller;
             BufferContext = new BufferedGraphicsContext();
             SizeGraphicsBuffer();
 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
             SetStyle(ControlStyles.DoubleBuffer, false);
+        }
+
+        public void SetController(IBufferedControlController gridConnDrawer)
+        {
+            Controller = gridConnDrawer;
+        }
+
+        public BufferedControl(IBufferedControlController controller)
+            :this()
+        {
+            Controller = controller;
         }
 
         private void SizeGraphicsBuffer()

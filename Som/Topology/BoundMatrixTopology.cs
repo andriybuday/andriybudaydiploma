@@ -8,17 +8,17 @@ namespace Som.Topology
     {
         public int RowCount { get; private set; }
         public int ColCount { get; private set; }
+        public double WholeTopologyRadius { get; set; }
 
-        public BoundMatrixTopology(int rowCount, int colCount, double radius)
+        public BoundMatrixTopology(int rowCount, int colCount)
         {
             ColCount = colCount;
             RowCount = rowCount;
-            Radius = radius;
+            WholeTopologyRadius = Math.Max(rowCount, colCount) / 2.0;
         }
 
         public int NeuronsCount { get { return RowCount * ColCount; } }
 
-        public double Radius { get; set; }
 
         public int GetNeuronNumber(Location location)
         {
@@ -45,7 +45,7 @@ namespace Som.Topology
             return new List<int>() { upper, down, right, left };
         }
 
-        public Dictionary<int, double> GetNeuronsInRadius(int neuronNumber)
+        public Dictionary<int, double> GetNeuronsInRadius(int neuronNumber, double radius)
         {
             //return Optimized_GetNeuronsInRadius(neuronNumber, Radius);
 
@@ -60,7 +60,7 @@ namespace Som.Topology
             var bfsQueue = new List<int>();
             bfsQueue.Add(neuronNumber);
 
-            for (int i = 0; i < Radius; i++)
+            for (int i = 0; i < WholeTopologyRadius; i++)
             {
                 IList<int> currentDirectlyConnected = null;
                 var currentLevelConnected = new List<int>();

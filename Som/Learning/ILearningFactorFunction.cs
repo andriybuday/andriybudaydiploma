@@ -4,7 +4,7 @@ namespace Som.Learning
 {
     public interface ILearningFactorFunction
     {
-        double GetResult(double inputValue);
+        double GetLearningRate(double inputValue);
 
         double[] Parameters { get; set; }
     }
@@ -17,7 +17,7 @@ namespace Som.Learning
             Parameters = parameters;
         }
 
-        public abstract double GetResult(double inputValue);
+        public abstract double GetLearningRate(double inputValue);
 
         public double[] Parameters { get; set; }
     }

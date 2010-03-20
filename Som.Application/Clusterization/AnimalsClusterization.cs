@@ -6,10 +6,10 @@ namespace Som.Application.Clusterization
 {
     public partial class AnimalsClusterization : Form
     {
-        public AnimalsClusterization()
+        public AnimalsClusterization(AnimalsClusterizationController controller)
         {
             InitializeComponent();
-            Controller = new AnimalsClusterizationController();
+            Controller = controller;
         }
 
         private void btnLoadData_Click(object sender, System.EventArgs e)

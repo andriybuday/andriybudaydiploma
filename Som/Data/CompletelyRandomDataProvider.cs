@@ -65,7 +65,7 @@ namespace Som.Data
             var result = new List<double>();
             for (int i = 0; i < D; i++)
             {
-                result.Add(Random.Next(10)*0.1);
+                result.Add(Random.NextDouble());
             }
             return result;
         }

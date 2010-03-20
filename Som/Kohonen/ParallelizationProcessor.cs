@@ -92,7 +92,7 @@ namespace Som.Kohonen
         protected virtual void AccommodateNeuronWeights(int neuronNum, IList<double> dataVector, int iteration, double distance)
         {
             var neuronWeights = Network.Neurons[neuronNum].Weights;
-            var factorValue = LearningFactorFunction.GetResult(iteration);
+            var factorValue = LearningFactorFunction.GetLearningRate(iteration);
             for (int i = 0; i < neuronWeights.Count; i++)
             {
                 double weight = neuronWeights[i];
