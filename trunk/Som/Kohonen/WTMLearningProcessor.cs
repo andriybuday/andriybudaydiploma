@@ -17,27 +17,28 @@ namespace Som.Kohonen
 
         protected override void AccommodateNetworkWeights(int bestNeuronNum, IList<double> dataVector, int iteration)
         {
-            var effectedNeurons = Topology.GetNeuronsInRadius(bestNeuronNum);
-            var bestNeuronWgs = Network.Neurons[bestNeuronNum].Weights;
+            var radius = RadiusProvider.GetRadius(iteration);
+            var effectedNeurons = Topology.GetNeuronsInRadius(bestNeuronNum, radius);
+
             foreach (var effectedNeuron in effectedNeurons.Keys)
             {
-                var distance = MetricFunction.GetDistance(bestNeuronWgs, Network.Neurons[effectedNeuron].Weights);
-                //var distance = effectedNeurons[effectedNeuron];
-                //var distance = 1;
+                var distance = effectedNeurons[effectedNeuron];
 
-                AccommodateNeuronWeights(effectedNeuron, dataVector, iteration, distance);    
+                AccommodateNeuronWeights(effectedNeuron, dataVector, iteration, distance, radius);    
             }
         }
 
-        protected override void AccommodateNeuronWeights(int bestNeuronNum, IList<double> dataVector, int iteration, double distance)
+        protected override void AccommodateNeuronWeights(int neuronNumber, IList<double> dataVector, int iteration, double distance, double radius)
         {
-            var bstNeuronWghts = Network.Neurons[bestNeuronNum].Weights;
-            var factorValue = LearningFactorFunction.GetResult(iteration);
-            var neighboCoef = NeighbourhoodFunction.GetResult(distance);
-            for (int i = 0; i < bstNeuronWghts.Count; i++)
+            var neuronWghts = Network.Neurons[neuronNumber].Weights;
+
+            var learningRate = LearningFactorFunction.GetLearningRate(iteration);
+            var falloffRate = NeighbourhoodFunction.GetDistanceFalloff(distance, radius);
+            
+            for (int i = 0; i < neuronWghts.Count; i++)
             {
-                double weight = bstNeuronWghts[i];
-                bstNeuronWghts[i] += factorValue * neighboCoef * (dataVector[i] - weight);
+                double weight = neuronWghts[i];
+                neuronWghts[i] += learningRate * falloffRate * (dataVector[i] - weight);
             }
         }
     }

@@ -10,8 +10,8 @@ namespace Som.Tests.Topology
         [Test]
         public void GetNeuronsInRadius_Radius0()
         {
-            var matrixTopology = new BoundMatrixTopology(4, 6, 0);
-            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(15);
+            var matrixTopology = new BoundMatrixTopology(4, 6);
+            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(15, 0);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(1));
             Assert.IsTrue(neuronsInRadius.ContainsKey(15));
@@ -20,8 +20,8 @@ namespace Som.Tests.Topology
         [Test]
         public void GetNeuronsInRadius_Radius1()
         {
-            var matrixTopology = new BoundMatrixTopology(4, 6, 1);
-            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(15);
+            var matrixTopology = new BoundMatrixTopology(4, 6);
+            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(15, 1);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(5));
             Assert.IsTrue(neuronsInRadius.ContainsKey(15));
@@ -34,8 +34,8 @@ namespace Som.Tests.Topology
         [Test]
         public void GetNeuronsInRadius_Radius1_DownRightCorner()
         {
-            var matrixTopology = new BoundMatrixTopology(4, 6, 1);
-            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(23);
+            var matrixTopology = new BoundMatrixTopology(4, 6);
+            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(23, 1);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(5));
             Assert.IsTrue(neuronsInRadius.ContainsKey(23));
@@ -48,8 +48,8 @@ namespace Som.Tests.Topology
         [Test]
         public void GetNeuronsInRadius_Radius1_LeftSide()
         {
-            var matrixTopology = new BoundMatrixTopology(4, 6, 1);
-            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(6);
+            var matrixTopology = new BoundMatrixTopology(4, 6);
+            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(6, 1);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(5));
             Assert.IsTrue(neuronsInRadius.ContainsKey(6));
@@ -62,8 +62,8 @@ namespace Som.Tests.Topology
         [Test]
         public void GetNeuronsInRadius_Radius2()
         {
-            var matrixTopology = new BoundMatrixTopology(3, 6, 2);
-            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(3);
+            var matrixTopology = new BoundMatrixTopology(3, 6);
+            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(3, 2);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(11));
             Assert.IsTrue(neuronsInRadius.ContainsKey(1));
@@ -82,8 +82,8 @@ namespace Som.Tests.Topology
         [Test]
         public void GetNeuronsInRadius_ShouldTakeWholeMap()
         {
-            var matrixTopology = new BoundMatrixTopology(1, 2, 7);
-            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(1);
+            var matrixTopology = new BoundMatrixTopology(1, 2);
+            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(1, 7);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(2));
             Assert.IsTrue(neuronsInRadius.ContainsKey(1));
@@ -93,8 +93,8 @@ namespace Som.Tests.Topology
         [Test]
         public void GetNeuronsInRadius_ShouldBeGoodNest_Corner()
         {
-            var matrixTopology = new BoundMatrixTopology(10, 10, 4);
-            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(88);
+            var matrixTopology = new BoundMatrixTopology(10, 10);
+            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(88, 4);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(41));
             Assert.IsTrue(neuronsInRadius.ContainsKey(88));
@@ -110,8 +110,8 @@ namespace Som.Tests.Topology
         [Test]
         public void GetNeuronsInRadius_ShouldBeGoodNest_StartCorner()
         {
-            var matrixTopology = new BoundMatrixTopology(10, 10, 2);
-            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(0);
+            var matrixTopology = new BoundMatrixTopology(10, 10);
+            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(0, 2);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(13));
             Assert.IsTrue(neuronsInRadius.ContainsKey(80));
@@ -126,7 +126,7 @@ namespace Som.Tests.Topology
         [Test]
         public void Optimized_GetNeuronsInRadius_RunIt()
         {
-            var matrixTopology = new BoundMatrixTopology(10, 10, 4);
+            var matrixTopology = new BoundMatrixTopology(10, 10);
             var neuronsInRadius = matrixTopology.Optimized_GetNeuronsInRadius(25, 4);
         }
     }

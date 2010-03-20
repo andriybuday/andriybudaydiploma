@@ -21,9 +21,11 @@ namespace Som.Kohonen
         protected ILearningDataProvider LearningDataProvider { get; set; }
         public INetwork Network { get; set; }
         public ITopology Topology { get; set; }
+        protected IRadiusProvider RadiusProvider { get; private set; }
+        protected INeighbourhoodFunction NeighbourhoodFunction { get; set; }
         protected IMetricFunction MetricFunction { get; set; }
         protected ILearningFactorFunction LearningFactorFunction { get; set; }
-        protected INeighbourhoodFunction NeighbourhoodFunction { get; set; }
+        
 
         protected int MaxIterationsCount { get; set; }
 
@@ -37,6 +39,8 @@ namespace Som.Kohonen
             NeighbourhoodFunction = neighbourhoodFunction;
             MaxIterationsCount = maxIterationsCount;
             SuffleProvider = suffleProvider;
+
+            RadiusProvider = new DefaultRadiusProvider(maxIterationsCount, topology.WholeTopologyRadius);
         }
 
         public void Learn()
@@ -78,13 +82,13 @@ namespace Som.Kohonen
 
         protected virtual void AccommodateNetworkWeights(int bestNeuronNum, IList<double> dataVector, int iteration)
         {
-            AccommodateNeuronWeights(bestNeuronNum, dataVector, iteration, 0);
+            AccommodateNeuronWeights(bestNeuronNum, dataVector, iteration, 0, 1);
         }
 
-        protected virtual void AccommodateNeuronWeights(int bestNeuronNum, IList<double> dataVector, int iteration, double distance)
+        protected virtual void AccommodateNeuronWeights(int neuronNumber, IList<double> dataVector, int iteration, double distance, double radius)
         {
-            var bstNeuronWghts = Network.Neurons[bestNeuronNum].Weights;
-            var factorValue = LearningFactorFunction.GetResult(iteration);
+            var bstNeuronWghts = Network.Neurons[neuronNumber].Weights;
+            var factorValue = LearningFactorFunction.GetLearningRate(iteration);
             for (int i = 0; i < bstNeuronWghts.Count; i++)
             {
                 double weight = bstNeuronWghts[i];

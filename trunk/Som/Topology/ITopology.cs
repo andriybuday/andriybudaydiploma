@@ -11,7 +11,7 @@ namespace Som.Topology
 
         int ColCount { get; }
         
-        double Radius { get; set; }
+        double WholeTopologyRadius { get; }
 
         int GetNeuronNumber(Location location);
         
@@ -19,6 +19,6 @@ namespace Som.Topology
 
         IList<int> GetDirectlyConnectedNeurons(int neuronNumber);
 
-        Dictionary<int, double> GetNeuronsInRadius(int neuronNumber);
+        Dictionary<int, double> GetNeuronsInRadius(int neuronNumber, double radius);
     }
 }

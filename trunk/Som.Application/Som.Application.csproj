@@ -73,6 +73,14 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="SomExtensions\ControllableWtmLearningProcessor.cs" />
+    <Compile Include="SomExtensions\GirlPointsDataProvider.cs" />
+    <Compile Include="SomExtensions\SomFactoryUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SomExtensions\SomFactoryUI.Designer.cs">
+      <DependentUpon>SomFactoryUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="SomMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,12 +110,21 @@
     <EmbeddedResource Include="Grid\GridTest.resx">
       <DependentUpon>GridTest.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SomExtensions\SomFactoryUI.resx">
+      <DependentUpon>SomFactoryUI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SomMain.resx">
       <DependentUpon>SomMain.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Grid\BufferedControl.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Pictures\girl.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Pictures\girl.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

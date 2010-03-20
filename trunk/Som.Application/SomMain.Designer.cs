@@ -29,23 +29,35 @@
         private void InitializeComponent()
         {
             this.buttonGridTest = new System.Windows.Forms.Button();
+            this.buttonAnimalsClusterization = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonGridTest
             // 
             this.buttonGridTest.Location = new System.Drawing.Point(12, 12);
             this.buttonGridTest.Name = "buttonGridTest";
-            this.buttonGridTest.Size = new System.Drawing.Size(75, 23);
+            this.buttonGridTest.Size = new System.Drawing.Size(118, 23);
             this.buttonGridTest.TabIndex = 0;
             this.buttonGridTest.Text = "Grid Test";
             this.buttonGridTest.UseVisualStyleBackColor = true;
             this.buttonGridTest.Click += new System.EventHandler(this.buttonGridTest_Click);
+            // 
+            // buttonAnimalsClusterization
+            // 
+            this.buttonAnimalsClusterization.Location = new System.Drawing.Point(12, 41);
+            this.buttonAnimalsClusterization.Name = "buttonAnimalsClusterization";
+            this.buttonAnimalsClusterization.Size = new System.Drawing.Size(118, 23);
+            this.buttonAnimalsClusterization.TabIndex = 1;
+            this.buttonAnimalsClusterization.Text = "Animals Clusterization";
+            this.buttonAnimalsClusterization.UseVisualStyleBackColor = true;
+            this.buttonAnimalsClusterization.Click += new System.EventHandler(this.buttonAnimalsClusterization_Click);
             // 
             // SomMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(388, 245);
+            this.Controls.Add(this.buttonAnimalsClusterization);
             this.Controls.Add(this.buttonGridTest);
             this.Name = "SomMain";
             this.Text = "SomMain";
@@ -57,5 +69,6 @@
         #endregion
 
         private System.Windows.Forms.Button buttonGridTest;
+        private System.Windows.Forms.Button buttonAnimalsClusterization;
     }
 }

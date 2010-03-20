@@ -4,15 +4,19 @@ namespace Som.Learning
 {
     public class ExponentionalFactorFunction : LearningFactorFunctionBase
     {
-        public ExponentionalFactorFunction(double[] parameters)
-            : base(parameters)
+        public double StartLearningRate { get; private set; }
+        public double MaxIterationsCount { get; private set; }
+
+        public ExponentionalFactorFunction(double startRate, int maxIterationsCount)
+            : base(new double[]{startRate, maxIterationsCount})
         {
-            if (parameters.Length != 2) { throw new ArgumentException("For ExponentionalFactorFunction count of input parameters should be equal to 2."); }
+            StartLearningRate = startRate;
+            MaxIterationsCount = maxIterationsCount;
         }
 
-        public override double GetResult(double k)
+        public override double GetLearningRate(double iteration)
         {
-            return Parameters[0]*Math.Exp(-Parameters[1]*k);
+            return StartLearningRate * Math.Exp(- iteration / MaxIterationsCount);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using Som.ActivationFunction;
 using Som.Application.Base;
+using Som.Application.SomExtensions;
 using Som.Data;
 using Som.Data.Suffle;
 using Som.Kohonen;
@@ -18,6 +19,7 @@ namespace Som.Application.Grid
     {
         public GridController()
         {
+            Random = new Random();
             UI = new GridTest(this);
         }
 
@@ -31,40 +33,13 @@ namespace Som.Application.Grid
 
         private ILearningDataProvider LearningDataProvider { get; set; }
         private IMetricFunction MetricFunction { get; set; }
-        private LearningProcessorBase LearningProcessor;
+        public ControllableWtmLearningProcessor LearningProcessor { get; private set; }
 
-        public void InitializeSom()
+        public void InitializeSom(ControllableWtmLearningProcessor learningProcessor)
         {
-            //learning data
-            //LearningDataProvider = new CompletelyRandomDataProvider(2, 250);
-            LearningDataProvider = new TwoDimentionsDataProvider(2, 100);
-            var dataVectorDimention = LearningDataProvider.DataVectorDimention;
-            var maxWeights = new List<double>();
-            var minWeights = new List<double>();
-            for (int i = 0; i < dataVectorDimention; i++)
-            {
-                minWeights.Add(0.25);
-                maxWeights.Add(0.75);
-            }
+            LearningProcessor = learningProcessor;
 
-            ITopology topology = new SimpleMatrixTopology(3, 3, 2);
-
-            IActivationFunction activationFunction = new TransparentActivationFunction(new double[] { });
-            //IActivationFunction activationFunction = new LinearActivationFunction(new double[] {0.2, 0.3});
-
-            INetwork network = new NetworkBase(true, minWeights, maxWeights, activationFunction, topology);
-
-            MetricFunction = new EuclideanMetricFunction();
-            //ILearningFactorFunction learningFactorFunction = new GaussFactorFunction(new double[] { 0.5 });
-            ILearningFactorFunction learningFactorFunction = new ConstantFactorFunction(new double[] {0.1});
-            INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction(5);
-            ISuffleProvider suffleProvider = new NotSufflingProvider();
-            LearningProcessor = new WTMLearningProcessor(
-                LearningDataProvider, network, topology, MetricFunction, learningFactorFunction, neighbourhoodFunction, 3000, suffleProvider);
-
-            LearningProcessor.NewEpochStarted += new LearningProcessorBase.LearningProcessingHandler<NewEpochStartedEvenArgs>(LearningProcessor_NewEpochStarted);
-
-            UI.DrawPoints(LearningProcessor.Network.Neurons.Select(x => x.Weights.ToList()).ToList());
+            UI.DrawNeuroNet(LearningProcessor.Network.Neurons);
         }
 
         public int Iteration { get; private set; }
@@ -74,10 +49,33 @@ namespace Som.Application.Grid
             UI.UpdateUI();
         }
 
+        public void Next(int iterations)
+        {
+            List<double> dataPoint;
+            for (int i = 0; i < iterations; i++)
+            {
+                for (int j = 0; j < 250; j++)
+                {
+                    dataPoint = new List<double>() { Random.NextDouble(), Random.NextDouble() };
+                    LearningProcessor.Next(dataPoint);        
+                }
+                LearningProcessor.IncrementIteration();
+            }
+            
+            Iteration = LearningProcessor.Iteration;
+
+            UI.DrawNeuroNet(LearningProcessor.Network.Neurons);
+
+            UI.UpdateUI();
+        }
+
+        public Random Random { get; private set; }
+
         public void Learn()
         {
             LearningProcessor.Learn();
-            UI.DrawPoints(LearningProcessor.Network.Neurons.Select(x => x.Weights.ToList()).ToList());
+            UI.DrawNeuroNet(LearningProcessor.Network.Neurons);
+            UI.UpdateUI();
         }
     }
 }

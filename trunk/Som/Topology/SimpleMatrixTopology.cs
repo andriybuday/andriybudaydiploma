@@ -7,17 +7,17 @@ namespace Som.Topology
     {
         public int RowCount { get; private set; }
         public int ColCount { get; private set; }
+        public double WholeTopologyRadius { get; private set; }
 
-        public SimpleMatrixTopology(int rowCount, int colCount, double radius)
+        public SimpleMatrixTopology(int rowCount, int colCount)
         {
             ColCount = colCount;
             RowCount = rowCount;
-            Radius = radius;
+
+            WholeTopologyRadius = Math.Max(ColCount, RowCount) / 2.0;
         }
 
         public int NeuronsCount { get { return RowCount * ColCount; } }
-
-        public double Radius { get; set; }
 
         public int GetNeuronNumber(Location location)
         {
@@ -31,39 +31,33 @@ namespace Som.Topology
 
         public IList<int> GetDirectlyConnectedNeurons(int neuronNumber)
         {
+            var result = new List<int>();
             int upper = neuronNumber - ColCount;
             int down = neuronNumber + ColCount;
-            int right;
-            int left;
+            int right = neuronNumber + 1;
+            int left = neuronNumber - 1;
 
-            if (upper < 0) { upper += NeuronsCount; }
-            if (down > NeuronsCount) { down -= NeuronsCount; }
-            right = ((neuronNumber + 1) % ColCount == 0) ? (neuronNumber - ColCount + 1) : (neuronNumber + 1);
-            left = (neuronNumber % ColCount == 0) ? (neuronNumber + ColCount - 1) : (neuronNumber - 1);
+            if (upper >= 0) result.Add(upper);
+            if (down < NeuronsCount) result.Add(down);
+            if (right % ColCount != 0) result.Add(right);
+            if ((left+1) % ColCount != 0) result.Add(left);
 
-            return new List<int>() { upper, down, right, left };
+            return result;
         }
 
-        public Dictionary<int, double> GetNeuronsInRadius(int neuronNumber)
+        public Dictionary<int, double> GetNeuronsInRadius(int neuronNumber, double radius)
         {
-            return Slow_GetNeuronsInRadius(neuronNumber, Radius);
+            return Slow_GetNeuronsInRadius(neuronNumber, radius);
         }
 
         public Dictionary<int, double> Slow_GetNeuronsInRadius(int neuronNumber, double radius)
         {
             var neuronsCount = RowCount * ColCount;
 
-            var neuronRowPos = neuronNumber % ColCount;
-            var neuronColPos = neuronNumber / ColCount;
-
-            var sR = radius * radius;
-            var rowStart = ColCount * (neuronNumber / ColCount);
-            var rowEnd = rowStart + ColCount - 1;
-            var colStart = neuronNumber % ColCount;
-            var colEnd = colStart + (RowCount - 1) * ColCount;
+            var neuronColPos = neuronNumber % ColCount;
+            var neuronRowPos = neuronNumber / ColCount;
 
             var result = new Dictionary<int, double>();
-            //result.Add(neuronNumber, 0);
 
             for (int col = 0; col < ColCount; col++)
             {
