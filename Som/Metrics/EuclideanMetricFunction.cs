@@ -6,12 +6,12 @@ namespace Som.Metrics
 {
     public class EuclideanMetricFunction : IMetricFunction
     {
-        public double GetDistance(IList<double> firstVector, IList<double> secondVector)
+        public double GetDistance(double[] firstVector, double[] secondVector)
         {
-            if(firstVector.Count != secondVector.Count) throw new ArgumentException("For getting distance both input vectors should be of equal dimention.");
+            if(firstVector.Length != secondVector.Length) throw new ArgumentException("For getting distance both input vectors should be of equal dimention.");
 
             double sum = 0;
-            int vectorsCount = firstVector.Count;
+            int vectorsCount = firstVector.Length;
 
             for (int i = 0; i < vectorsCount; i++)
             {

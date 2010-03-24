@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Som.ActivationFunction;
 using Som.Data;
 using Som.Data.Suffle;
-using Som.Kohonen;
+using Som.KohonenLearningProcessor;
 using Som.Learning;
 using Som.Metrics;
 using Som.Network;
@@ -28,7 +23,7 @@ namespace Som.Application.SomExtensions
         private IMetricFunction MetricFunction { get; set; }
         private ControllableWtmLearningProcessor LearningProcessor { get; set; }       
 
-        public LearningProcessorBase GetSomProcessor()
+        public LearningProcessor GetSomProcessor()
         {
             var iterations = (int)numericUpDownIterations.Value;
             var startLearningRate = 0.07;
@@ -38,7 +33,7 @@ namespace Som.Application.SomExtensions
             var wh = (int)numericUpDownRows.Value;
 
             //learning data
-            LearningDataProvider = new TwoDimentionsDataProvider(2, 250);
+            LearningDataProvider = new CompletelyRandomDataProvider(2, 250);
 
             //GIRL
 
@@ -66,8 +61,7 @@ namespace Som.Application.SomExtensions
             ILearningFactorFunction learningFactorFunction = new ExponentionalFactorFunction(startLearningRate, iterations);
             INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
             ISuffleProvider suffleProvider = new NotSufflingProvider();
-            LearningProcessor = new ControllableWtmLearningProcessor(
-                LearningDataProvider, network, topology, MetricFunction, learningFactorFunction, neighbourhoodFunction, iterations, suffleProvider);
+            LearningProcessor = new ControllableWtmLearningProcessor(LearningDataProvider, network, topology, MetricFunction, learningFactorFunction, neighbourhoodFunction, iterations, suffleProvider);
 
             return LearningProcessor;
         }

@@ -32,22 +32,22 @@ namespace Som.Application.SomExtensions
             get { return D; }
         }
 
-        public IList<double> GetLearingDataVector(int vectorIndex)
+        public double[] GetLearingDataVector(int vectorIndex)
         {
-            var result = new List<double>() {Random.NextDouble(), Random.NextDouble()};
+            var result = new double[] {Random.NextDouble(), Random.NextDouble()};
 
             if(GirlImage != null)
             {
                 while (!GirlHoldsPoint(result))
                 {
-                    result = new List<double>() { Random.NextDouble(), Random.NextDouble() };
+                    result = new double[] { Random.NextDouble(), Random.NextDouble() };
                 }
             }
 
             return result;
         }
 
-        private bool GirlHoldsPoint(List<double> point)
+        private bool GirlHoldsPoint(double[] point)
         {
             var x = (int)(point[0]*GirlImage.Width);
             var y = (int)(point[1] * GirlImage.Height);

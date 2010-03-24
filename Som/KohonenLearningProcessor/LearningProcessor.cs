@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using Som.Data.Suffle;
 using Som.Learning;
 using Som.Data;
@@ -8,28 +7,23 @@ using Som.Metrics;
 using Som.Network;
 using Som.Topology;
 
-namespace Som.Kohonen
+namespace Som.KohonenLearningProcessor
 {
-    public class LearningProcessorBase
+    public class LearningProcessor
     {
-
-        public delegate void LearningProcessingHandler<Arg>(Object sender, Arg e);
-        public event LearningProcessingHandler<NewEpochStartedEvenArgs> NewEpochStarted;
-
+        public INetwork Network { get; private set; }
+        public ITopology Topology { get; private set; }
 
         protected ISuffleProvider SuffleProvider { get; set; }
         protected ILearningDataProvider LearningDataProvider { get; set; }
-        public INetwork Network { get; set; }
-        public ITopology Topology { get; set; }
         protected IRadiusProvider RadiusProvider { get; private set; }
         protected INeighbourhoodFunction NeighbourhoodFunction { get; set; }
         protected IMetricFunction MetricFunction { get; set; }
         protected ILearningFactorFunction LearningFactorFunction { get; set; }
         
-
         protected int MaxIterationsCount { get; set; }
 
-        public LearningProcessorBase(ILearningDataProvider learningDataProvider, INetwork network, ITopology topology, IMetricFunction metricFunction, ILearningFactorFunction learningFactorFunction, INeighbourhoodFunction neighbourhoodFunction, int maxIterationsCount, ISuffleProvider suffleProvider)
+        public LearningProcessor(ILearningDataProvider learningDataProvider, INetwork network, ITopology topology, IMetricFunction metricFunction, ILearningFactorFunction learningFactorFunction, INeighbourhoodFunction neighbourhoodFunction, int maxIterationsCount, ISuffleProvider suffleProvider)
         {
             LearningDataProvider = learningDataProvider;
             Network = network;
@@ -43,7 +37,7 @@ namespace Som.Kohonen
             RadiusProvider = new DefaultRadiusProvider(maxIterationsCount, topology.WholeTopologyRadius);
         }
 
-        public void Learn()
+        public virtual void Learn()
         {
             int vectorsCount = LearningDataProvider.LearningVectorsCount;
             IList<int> suffleList = new SuffleList(vectorsCount);
@@ -51,11 +45,10 @@ namespace Som.Kohonen
             for (int iteration = 0; iteration < MaxIterationsCount; iteration++)
             {
                 suffleList = SuffleProvider.Suffle(suffleList);
-                OnNewEpochStarted(iteration);
 
                 for (int dataInd = 0; dataInd < vectorsCount; dataInd++)
                 {
-                    IList<double> dataVector = LearningDataProvider.GetLearingDataVector(suffleList[dataInd]);
+                    double[] dataVector = LearningDataProvider.GetLearingDataVector(suffleList[dataInd]);
 
                     int bestNeuronNum = FindBestMatchingNeuron(dataVector);
 
@@ -64,7 +57,7 @@ namespace Som.Kohonen
             }
         }
 
-        protected virtual int FindBestMatchingNeuron(IList<double> dataVector)
+        protected virtual int FindBestMatchingNeuron(double[] dataVector)
         {
             int result = -1;
             Double minDistance = Double.MaxValue;
@@ -80,38 +73,31 @@ namespace Som.Kohonen
             return result;
         }
 
-        protected virtual void AccommodateNetworkWeights(int bestNeuronNum, IList<double> dataVector, int iteration)
+        protected virtual void AccommodateNetworkWeights(int bestNeuronNum, double[] dataVector, int iteration)
         {
-            AccommodateNeuronWeights(bestNeuronNum, dataVector, iteration, 0, 1);
-        }
+            var radius = RadiusProvider.GetRadius(iteration);
+            var effectedNeurons = Topology.GetNeuronsInRadius(bestNeuronNum, radius);
 
-        protected virtual void AccommodateNeuronWeights(int neuronNumber, IList<double> dataVector, int iteration, double distance, double radius)
-        {
-            var bstNeuronWghts = Network.Neurons[neuronNumber].Weights;
-            var factorValue = LearningFactorFunction.GetLearningRate(iteration);
-            for (int i = 0; i < bstNeuronWghts.Count; i++)
+            foreach (var effectedNeuron in effectedNeurons.Keys)
             {
-                double weight = bstNeuronWghts[i];
-                bstNeuronWghts[i] += factorValue * (dataVector[i] - weight);
+                var distance = effectedNeurons[effectedNeuron];
+
+                AccommodateNeuronWeights(effectedNeuron, dataVector, iteration, distance, radius);
             }
         }
 
-        private void OnNewEpochStarted(int iteration)
+        protected virtual void AccommodateNeuronWeights(int neuronNumber, double[] dataVector, int iteration, double distance, double radius)
         {
-            if(NewEpochStarted != null)
+            var neuronWghts = Network.Neurons[neuronNumber].Weights;
+
+            var learningRate = LearningFactorFunction.GetLearningRate(iteration);
+            var falloffRate = NeighbourhoodFunction.GetDistanceFalloff(distance, radius);
+
+            for (int i = 0; i < neuronWghts.Length; i++)
             {
-                NewEpochStarted(this, new NewEpochStartedEvenArgs(iteration));
+                double weight = neuronWghts[i];
+                neuronWghts[i] += learningRate * falloffRate * (dataVector[i] - weight);
             }
-        }
-    }
-
-    public class NewEpochStartedEvenArgs : EventArgs
-    {
-        public int Iteration { get; private set; }
-
-        public NewEpochStartedEvenArgs(int iteration)
-        {
-            Iteration = iteration;
         }
     }
 }

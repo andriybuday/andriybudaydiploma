@@ -59,15 +59,13 @@
     <Compile Include="Data\Suffle\ISuffleProvider.cs" />
     <Compile Include="Data\Suffle\NotSufflingProvider.cs" />
     <Compile Include="Data\Suffle\SuffleProvider.cs" />
-    <Compile Include="Kohonen\ParallelizationProcessor.cs" />
     <Compile Include="Data\ILearningDataProvider.cs" />
     <Compile Include="Data\ILearningDataPersister.cs" />
-    <Compile Include="Kohonen\LearningProcessorBase.cs" />
+    <Compile Include="KohonenLearningProcessor\ConcurrencyLearningProcessor.cs" />
+    <Compile Include="KohonenLearningProcessor\LearningProcessor.cs" />
     <Compile Include="Data\LearningDataProvider.cs" />
     <Compile Include="Data\Suffle\SuffleList.cs" />
     <Compile Include="Data\TextFileLearningDataPersister.cs" />
-    <Compile Include="Kohonen\WTALearningProcessor.cs" />
-    <Compile Include="Kohonen\WTMLearningProcessor.cs" />
     <Compile Include="Learning\ConstantFactorFunction.cs" />
     <Compile Include="Learning\ExponentionalFactorFunction.cs" />
     <Compile Include="Learning\GaussFactorFunction.cs" />

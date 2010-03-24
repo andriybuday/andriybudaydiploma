@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 using Som.Topology;
 
 namespace Som.Tests.Topology
@@ -11,7 +13,7 @@ namespace Som.Tests.Topology
         {
             var matrixTopology = new SimpleMatrixTopology(10, 10);
             var neuronsInRadius = matrixTopology.GetNeuronsInRadius(77, 3);
-
         }
+
     }
 }
