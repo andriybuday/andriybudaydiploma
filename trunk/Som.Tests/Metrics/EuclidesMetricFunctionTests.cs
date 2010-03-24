@@ -14,8 +14,8 @@ namespace Som.Tests.Metrics
         public void GetDistance_EnsureReturnsCorrectResult()
         {
             var euclidesMetricFunction = new EuclideanMetricFunction();
-            var firstVector = new List<double>(){0,0};
-            var secondVector = new List<double>(){3,4};
+            var firstVector = new double[]{0,0};
+            var secondVector = new double[]{ 3, 4 };
             double distance = euclidesMetricFunction.GetDistance(firstVector, secondVector);
 
             Assert.That(distance, Is.EqualTo(5));
@@ -25,14 +25,15 @@ namespace Som.Tests.Metrics
         public void GetDistance_GetExucutionTime()
         {
             var euclidesMetricFunction = new EuclideanMetricFunction();
-            var firstVector = new List<double>();
-            var secondVector = new List<double>();
+            var N = 10000000;
+            var firstVector = new double[N];
+            var secondVector = new double[N];
 
             var random = new Random();
-            for (int i = 0; i < 10000000; i++)
+            for (int i = 0; i < N; i++)
             {
-                firstVector.Add(random.NextDouble());
-                secondVector.Add(random.NextDouble());
+                firstVector[i] = random.NextDouble();
+                secondVector[i] = random.NextDouble();
             }
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();

@@ -7,7 +7,7 @@ namespace Som.Network
 {
     public interface INeuron
     {
-        IList<Double> Weights { get; set; }
+        double[] Weights { get; set; }
 
         Double GetReaction(IList<Double> inputVector);
 

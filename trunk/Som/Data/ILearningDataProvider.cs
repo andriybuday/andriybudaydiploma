@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Som.Kohonen;
-
+﻿
 namespace Som.Data
 {
     public interface ILearningDataProvider
@@ -9,7 +7,7 @@ namespace Som.Data
 
         int DataVectorDimention { get; }
 
-        IList<double> GetLearingDataVector(int vectorIndex); 
+        double[] GetLearingDataVector(int vectorIndex); 
     }
 }
 

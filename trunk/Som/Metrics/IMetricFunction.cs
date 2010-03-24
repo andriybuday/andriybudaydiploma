@@ -6,6 +6,6 @@ namespace Som.Metrics
 {
     public interface IMetricFunction
     {
-        double GetDistance(IList<Double> firstVector, IList<Double> secondVector);
+        double GetDistance(Double[] firstVector, Double[] secondVector);
     }
 }

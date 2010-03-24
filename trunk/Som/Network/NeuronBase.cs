@@ -10,9 +10,10 @@ namespace Som.Network
     public class NeuronBase : INeuron
     {
         private static readonly Random Random = new Random();
-        public NeuronBase(IList<double> weights, IActivationFunction activationFunction)
+        public NeuronBase(double[] weights, IActivationFunction activationFunction)
         {
-            if (weights == null && weights.Count == 0) throw new ArgumentException("weights array could not be null or have 0 elements.");
+            if (weights == null) throw new ArgumentException("weights array could not be null");
+            if (weights.Length == 0) throw new ArgumentException("weights array could not be null or have 0 elements.");
             if (activationFunction == null) throw new ArgumentException("AtivationFunciton for neuron could not be null.");
 
             Weights = weights;
@@ -34,43 +35,40 @@ namespace Som.Network
 
             ActivationFunction = activationFunction;
 
+            var d = maxWeights.Count;
             if (randomize)
-            {
-                Weights = new List<double>();
+            {    
+                Weights = new double[d];
 
                 if(minWeights != null)
                 {
-                    var d = maxWeights.Count;
                     for (int i = 0; i < d; i++)
                     {
                         double currentRandomized = minWeights[i] + Random.NextDouble() * (maxWeights[i] - minWeights[i]);
 
-                        Weights.Add(currentRandomized);
+                        Weights[i] = currentRandomized;
                     }    
                 }
                 else
                 {
-                    foreach (var currentMaxWeight in maxWeights)
-                    {
-                        Weights.Add(Random.NextDouble() * currentMaxWeight);
-                    }    
+                    for (int i = 0; i < d; i++) Weights[i] = Random.NextDouble() * maxWeights[i];
                 }
             }
             else
             {
-                Weights = maxWeights;
+                for (int i = 0; i < d; i++) Weights[i] = maxWeights[i];
             }
         }
 
-        public IList<double> Weights { get; set; }
+        public double[] Weights { get; set; }
 
         public double GetReaction(IList<double> inputVector)
         {
-            if(Weights.Count != inputVector.Count) throw new ArgumentException("Input vector length should be equal to current neuron Weights vector length.");
+            if(Weights.Length != inputVector.Count) throw new ArgumentException("Input vector length should be equal to current neuron Weights vector length.");
 
             double sum = 0;
 
-            for (int i = 0; i < Weights.Count; i++)
+            for (int i = 0; i < Weights.Length; i++)
             {
                 sum += Weights[i]*inputVector[i];
             }

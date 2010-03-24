@@ -4,7 +4,7 @@ using System.IO;
 using Som.ActivationFunction;
 using Som.Application.Base;
 using Som.Data.Suffle;
-using Som.Kohonen;
+using Som.KohonenLearningProcessor;
 using Som.Learning;
 using Som.Data;
 using Som.Metrics;
@@ -17,7 +17,7 @@ namespace Som.Application.Clusterization
     {
         private ILearningDataProvider LearningDataProvider { get; set; }
         private IMetricFunction MetricFunction { get; set; }
-        private LearningProcessorBase LearningProcessor;
+        private LearningProcessor LearningProcessor;
 
 
         public AnimalsClusterizationController()
@@ -52,8 +52,8 @@ namespace Som.Application.Clusterization
             for (int i = 0; i < dataVectorDimention; i++)
                 maxWeights.Add(1);
 
-            //ITopology topology = new SimpleMatrixTopology(wh, wh);
-            ITopology topology = new BoundMatrixTopology(wh, wh);
+            ITopology topology = new SimpleMatrixTopology(wh, wh);
+            //ITopology topology = new BoundMatrixTopology(wh, wh);
 
             IActivationFunction activationFunction = new TransparentActivationFunction(new double[] { });
 
@@ -64,7 +64,7 @@ namespace Som.Application.Clusterization
             INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
             ISuffleProvider suffleProvider = new SuffleProvider();
 
-            LearningProcessor = new WTMLearningProcessor(
+            LearningProcessor = new LearningProcessor(
                 LearningDataProvider, network, topology, MetricFunction, learningFactorFunction, neighbourhoodFunction, 1000, suffleProvider);
         }
 

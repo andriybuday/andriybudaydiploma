@@ -10,7 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BA33119-C0A1-4AEC-95A2-90FC8609AAA0}"
 	ProjectSection(SolutionItems) = preProject
 		Solution Files\GlobalAssemblyInfo.cs = Solution Files\GlobalAssemblyInfo.cs
+		Performance1.psess = Performance1.psess
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Som.PerformanceMeasurement", "Som.PerformanceMeasurement\Som.PerformanceMeasurement.csproj", "{CF0B6830-45C1-415C-A4B8-442C9DE53499}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +55,16 @@ Global
 		{1EA9FDC9-5E80-4B62-9065-692A6C7FC9CA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1EA9FDC9-5E80-4B62-9065-692A6C7FC9CA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1EA9FDC9-5E80-4B62-9065-692A6C7FC9CA}.Release|x86.ActiveCfg = Release|Any CPU
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Debug|x86.ActiveCfg = Debug|x86
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Debug|x86.Build.0 = Debug|x86
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Release|Any CPU.ActiveCfg = Release|x86
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Release|Mixed Platforms.Build.0 = Release|x86
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Release|x86.ActiveCfg = Release|x86
+		{CF0B6830-45C1-415C-A4B8-442C9DE53499}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

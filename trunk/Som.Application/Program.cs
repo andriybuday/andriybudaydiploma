@@ -7,7 +7,8 @@ namespace Som.Application
 {
     class Program
     {
-        [STAThread]
+        //[STAThread]
+        [MTAThread]
         static void Main(string[] args)
         {
             System.Windows.Forms.Application.EnableVisualStyles();

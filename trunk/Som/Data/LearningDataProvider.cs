@@ -5,7 +5,7 @@ namespace Som.Data
 {
     public class LearningDataProvider : ILearningDataProvider
     {
-        private List<List<double>> _learningVectors;
+        private List<double[]> _learningVectors;
 
         private ILearningDataPersister LearningDataPersister { get; set; }
 
@@ -13,7 +13,22 @@ namespace Som.Data
         {
             LearningDataPersister = learningDataPersister;
 
-            _learningVectors = LearningDataPersister.GetData();
+            _learningVectors = new List<double[]>();
+            var data = LearningDataPersister.GetData();
+            int d = 0;
+            if(data.Count > 0)
+            {
+                d = data[0].Count;
+            }
+            foreach (List<double> vector in data)
+            {
+                var dVector = new double[d];
+                for (int i = 0; i < d; i++)
+                {
+                    dVector[i] = vector[i];
+                }
+                _learningVectors.Add(dVector);
+            }
         }
 
         public int LearningVectorsCount
@@ -23,10 +38,10 @@ namespace Som.Data
 
         public int DataVectorDimention
         {
-            get { return (_learningVectors.Count > 0) ? _learningVectors[0].Count : -1; }
+            get { return (_learningVectors.Count > 0) ? _learningVectors[0].Length : -1; }
         }
 
-        public IList<double> GetLearingDataVector(int vectorIndex)
+        public double[] GetLearingDataVector(int vectorIndex)
         {
             if (_learningVectors.Count <= vectorIndex) throw new ArgumentException("VectorIndex is out of range");
 
