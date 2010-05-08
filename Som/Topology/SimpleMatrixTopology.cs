@@ -52,6 +52,17 @@ namespace Som.Topology
 
         }
 
+        public bool Overlaps(int neuronA, int neuronB, double radius)
+        {
+            var nColPosA = neuronA % ColCount;
+            var nRowPosA = neuronA / ColCount;
+            var nColPosB = neuronB % ColCount;
+            var nRowPosB = neuronB / ColCount;
+            var colDiff = Math.Abs(nColPosA - nColPosB);
+            var rowDiff = Math.Abs(nRowPosA - nRowPosB);
+            return (colDiff*colDiff + rowDiff*rowDiff) < (radius*radius);
+        }
+
         public Dictionary<int, double> Fast_SquarNeibo(int neuronNumber, double radius)
         {
             var result = new Dictionary<int, double>();

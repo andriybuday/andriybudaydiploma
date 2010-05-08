@@ -73,7 +73,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="SomExtensions\ControllableWtmLearningProcessor.cs" />
+    <Compile Include="SomExtensions\SomProcessorController.cs" />
     <Compile Include="SomExtensions\GirlPointsDataProvider.cs" />
     <Compile Include="SomExtensions\SomFactoryUI.cs">
       <SubType>UserControl</SubType>

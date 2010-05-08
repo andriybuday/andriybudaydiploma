@@ -7,7 +7,7 @@ namespace Som.Topology
         public double GetDistanceFalloff(double distance, double radius)
         {
             double denominator = 2 * radius * radius;
-            return Math.Exp(-(distance * distance / denominator));
+            return Math.Exp(- distance / denominator);
         }
     }
 }

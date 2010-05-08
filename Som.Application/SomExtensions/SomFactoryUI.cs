@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Som.ActivationFunction;
 using Som.Data;
 using Som.Data.Suffle;
-using Som.KohonenLearningProcessor;
 using Som.Learning;
+using Som.LearningProcessor;
 using Som.Metrics;
 using Som.Network;
 using Som.Topology;
@@ -17,30 +18,35 @@ namespace Som.Application.SomExtensions
         public SomFactoryUI()
         {
             InitializeComponent();
+            comboBoxProcessorType.SelectedIndex = 0;
+            comboBoxDataProvider.SelectedIndex = 0;
         }
 
-        private ILearningDataProvider LearningDataProvider { get; set; }
-        private IMetricFunction MetricFunction { get; set; }
-        private ControllableWtmLearningProcessor LearningProcessor { get; set; }       
+        public ILearningDataProvider LearningDataProvider { get; set; }
+        public IMetricFunction MetricFunction { get; set; }
 
-        public LearningProcessor GetSomProcessor()
+        public SomLearningProcessor GetSomProcessor()
         {
             var iterations = (int)numericUpDownIterations.Value;
             var startLearningRate = 0.07;
             Double.TryParse(textBoxLearningRate.Text, out startLearningRate);
             if (startLearningRate <= 0) startLearningRate = 0.07;
 
+            var inputVectorsCount = (int)numericUpDownInputSpaceNumber.Value;
+
             var wh = (int)numericUpDownRows.Value;
 
             //learning data
-            LearningDataProvider = new CompletelyRandomDataProvider(2, 250);
-
-            //GIRL
-
-            //LearningDataProvider = new GirlPointsDataProvider(250);
-            //var image = Image.FromFile(@"Pictures\girl.bmp");
-            //((GirlPointsDataProvider)LearningDataProvider).GirlImage = image;
-
+            if(comboBoxDataProvider.SelectedIndex == 0)
+            {
+                LearningDataProvider = new CompletelyRandomDataProvider(2, inputVectorsCount);    
+            }
+            else
+            {
+                LearningDataProvider = new GirlPointsDataProvider(inputVectorsCount);
+                var image = Image.FromFile(@"Pictures\girl.bmp");
+                ((GirlPointsDataProvider)LearningDataProvider).GirlImage = image;    
+            }
 
             var dataVectorDimention = LearningDataProvider.DataVectorDimention;
             var maxWeights = new List<double>();
@@ -60,11 +66,20 @@ namespace Som.Application.SomExtensions
             MetricFunction = new EuclideanMetricFunction();
             ILearningFactorFunction learningFactorFunction = new ExponentionalFactorFunction(startLearningRate, iterations);
             INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
-            ISuffleProvider suffleProvider = new NotSufflingProvider();
-            LearningProcessor = new ControllableWtmLearningProcessor(LearningDataProvider, network, topology, MetricFunction, learningFactorFunction, neighbourhoodFunction, iterations, suffleProvider);
+            IShuffleProvider shuffleProvider = new NotShufflingProvider();
 
-            return LearningProcessor;
+            SomLearningProcessor somLearningProcessor;
+            if(comboBoxProcessorType.SelectedIndex == 0)
+            {
+                somLearningProcessor = new SomLearningProcessor(LearningDataProvider, network, MetricFunction, learningFactorFunction,
+                                                                    neighbourhoodFunction, iterations, shuffleProvider);    
+            }
+            else
+            {
+                somLearningProcessor = new ConcurrencySomLearningProcessor(LearningDataProvider, network, MetricFunction, learningFactorFunction,
+                                                                    neighbourhoodFunction, iterations, shuffleProvider);
+            }
+            return somLearningProcessor;
         }
-
     }
 }

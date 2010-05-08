@@ -2,6 +2,7 @@
 using Som.Application.Base;
 using Som.Application.SomExtensions;
 using Som.Data;
+using Som.LearningProcessor;
 using Som.Metrics;
 
 namespace Som.Application.Grid
@@ -22,33 +23,36 @@ namespace Som.Application.Grid
         }
 
 
-        public ControllableWtmLearningProcessor LearningProcessor { get; private set; }
+        public SomProcessorController ProcessorController { get; private set; }
+        public ILearningDataProvider DataProvider { get; private set; }
 
-        public void InitializeSom(ControllableWtmLearningProcessor learningProcessor)
+        public void InitializeSom(SomLearningProcessor processorController, ILearningDataProvider dataProvider)
         {
-            LearningProcessor = learningProcessor;
+            ProcessorController = new SomProcessorController(processorController);
+            DataProvider = dataProvider;
 
-            UI.DrawNeuroNet(LearningProcessor.Network.Neurons);
+            UI.DrawNeuroNet(ProcessorController.GetNetworkNeurons());
         }
 
         public int Iteration { get; private set; }
 
         public void Next(int iterations)
         {
+            
             double[] dataPoint;
             for (int i = 0; i < iterations; i++)
             {
-                for (int j = 0; j < 1; j++)
+                for (int j = 0; j < ProcessorController.GetDataVectorsCount(); j++)
                 {
-                    dataPoint = new double[] { Random.NextDouble(), Random.NextDouble() };
-                    LearningProcessor.Next(dataPoint);        
+                    dataPoint = DataProvider.GetLearingDataVector(j);
+                    ProcessorController.Next(dataPoint);        
                 }
-                LearningProcessor.IncrementIteration();
+                ProcessorController.IncrementIteration();
             }
             
-            Iteration = LearningProcessor.Iteration;
+            Iteration = ProcessorController.Iteration;
 
-            UI.DrawNeuroNet(LearningProcessor.Network.Neurons);
+            UI.DrawNeuroNet(ProcessorController.GetNetworkNeurons());
 
             UI.UpdateUI();
         }
@@ -57,9 +61,14 @@ namespace Som.Application.Grid
 
         public void Learn()
         {
-            LearningProcessor.Learn();
-            UI.DrawNeuroNet(LearningProcessor.Network.Neurons);
+            ProcessorController.Learn();
+            UI.DrawNeuroNet(ProcessorController.GetNetworkNeurons());
             UI.UpdateUI();
+        }
+
+        public int GetMaxIterations()
+        {
+            return ProcessorController.LearningProcessor.MaxIterationsCount;
         }
     }
 }
