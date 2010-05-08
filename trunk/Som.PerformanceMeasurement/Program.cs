@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using Som.ActivationFunction;
 using Som.Data;
@@ -12,85 +13,128 @@ using Som.Topology;
 
 namespace Som.PerformanceMeasurement
 {
-    class Program
+    public class TestResult
     {
-        static void Main(string[] args)
+        public TestResult(int iterations, string gridSize, int inputSpaceDimentions)
         {
+            Iterations = iterations;
+            GridSize = gridSize;
+            InputSpaceDimentions = inputSpaceDimentions;
+            TimeStat = new List<AlgorithmTime>();
+        }
 
-            int dimentions = 5;
-            int iterations = 20000;
-            double startLearningRate = 0.07;
-            int wh = 100;
-            if (args.Length == 1)
+        public int Iterations { get; private set; }
+        public string GridSize { get; private set; }
+        public int InputSpaceDimentions { get; private set; }
+        public List<AlgorithmTime> TimeStat { get; set; }
+    }
+
+    public class AlgorithmTime
+    {
+        public AlgorithmTime(string algoName, double aveTime)
+        {
+            AlgoName = algoName;
+            AverageTime = aveTime;
+        }
+
+        public string AlgoName { get; private set; }
+        public double AverageTime { get; private set; }
+    }
+
+    public class Program
+    {
+        public static void Main(String[] args)
+        {
+            var program = new Program();
+            program.Run();
+
+        }
+
+        private void Run()
+        {
+            ReadConfiguration();
+
+            var testResults = new List<TestResult>();
+
+            Console.WriteLine("Start...");
+            foreach (var gridSideSize in Grids)
             {
-                Console.WriteLine("PARAMS_ARE: iterations width dimentinos");
-                Console.ReadKey();
-                return;
+                Console.WriteLine("Grid {0}X{0}...", gridSideSize);    
+                foreach (var dimention in Dimentions)
+                {
+                    Console.WriteLine("Dimentin {0}...", dimention);
+                    var testResult = GetOneTestResult(gridSideSize, dimention);
+                    testResults.Add(testResult);
+                }
             }
-            if (args.Length == 3)
+            Console.WriteLine("End.");
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
+        }
+
+        private TestResult GetOneTestResult(int gridSideSize, int dimention)
+        {
+            var testResult = new TestResult(Iterations, string.Format("{0}X{1}", gridSideSize, gridSideSize), dimention);
+
+            SomLearningProcessor somLearningProcessor = GetStandardLearningProcessor(Iterations, 0.07, gridSideSize, dimention);
+            var timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+            testResult.TimeStat.Add(new AlgorithmTime("Standard", timeForAlgo));
+            Console.WriteLine("Standard:{0}", timeForAlgo);
+
+            somLearningProcessor = GetParallelLearningProcessor(Iterations, 0.07, gridSideSize, dimention);
+            timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+            testResult.TimeStat.Add(new AlgorithmTime("Paralleled", timeForAlgo));
+            Console.WriteLine("Paralleled:{0}", timeForAlgo);
+
+            return testResult;
+        }
+
+        private double GetAverageTimeForAlgo(ILearningProcessor somLearningProcessor, TestResult testResult)
+        {
+            double mult = 1.0/Tests;
+            var averageTime = 0.0;
+            for (int i = 0; i < Tests; i++)
             {
-                iterations = Convert.ToInt32(args[0]);
-                wh = Convert.ToInt32(args[1]);
-                dimentions = Convert.ToInt32(args[2]);
+                var timeForStandardAlgo = GetTimeForExecutingLearn(somLearningProcessor);
+                averageTime += timeForStandardAlgo * mult;
             }
-
-
-            MeasurePerformance(iterations, startLearningRate, wh, dimentions);
-            //SecondaryMeasurements();
+            return averageTime;
         }
 
-        private static void MeasurePerformance(int iterations, double startLearningRate, int wh, int dimentions)
-        {
-            var ts1 = MeasureStandardLearn(iterations, startLearningRate, wh, dimentions);
-            Console.WriteLine();
-            var ts2 = MeasureConcurrentLearn(iterations, startLearningRate, wh, dimentions);
-            Console.WriteLine();
-
-            Console.WriteLine(string.Format("Standard learning took {0}H:{1}M:{2}S:{3}ms", ts1.Hours, ts1.Minutes, ts1.Seconds, ts1.Milliseconds));
-            Console.WriteLine(string.Format("Concurrent learning took {0}H:{1}M:{2}S:{3}ms", ts2.Hours, ts2.Minutes, ts2.Seconds, ts2.Milliseconds));
-
-            var standardMS = ts1.TotalMilliseconds;
-            var concurrentMS = ts2.TotalMilliseconds;
-            var diff = (standardMS - concurrentMS);
-
-            Console.WriteLine(string.Format("{0}%", Math.Round(diff * 100 / standardMS, 2)));
-        }
-
-        private static TimeSpan MeasureStandardLearn(int iterations, double startLearningRate, int wh, int dimentions)
-        {
-            SomLearningProcessor somLearningProcessor = GetStandardLearningProcessor(iterations, startLearningRate, wh, dimentions);
-
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            somLearningProcessor.Learn();
-
-            stopWatch.Stop();
-            return stopWatch.Elapsed;
-        }
-
-        private static TimeSpan MeasureConcurrentLearn(int iterations, double startLearningRate, int wh, int dimentions)
-        {
-            SomLearningProcessor somLearningProcessor = GetParallelLearningProcessor(iterations, startLearningRate, wh, dimentions);
-
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            somLearningProcessor.Learn();
-
-            stopWatch.Stop();
-            return stopWatch.Elapsed;
-
-        }
-
-
-        private static void SecondaryMeasurements()
+        private double GetTimeForExecutingLearn(ILearningProcessor learningProcessor)
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
+
+            learningProcessor.Learn();
+
             stopWatch.Stop();
-            var ts = stopWatch.Elapsed;
-            Console.WriteLine(string.Format("took {0}H:{1}M:{2}S:{3}ms", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
+            return stopWatch.Elapsed.TotalMilliseconds;
+        }
+
+        public int Tests { get; private set; }
+        public int Iterations { get; private set; }
+        public List<int> Dimentions { get; private set; }
+        public List<int> Grids { get; private set; }
+
+        private void ReadConfiguration()
+        {
+            Tests = Int32.Parse(ConfigurationSettings.AppSettings["Tests"]);
+            Iterations = Int32.Parse(ConfigurationSettings.AppSettings["Iterations"]);
+            var dimentionsString = ConfigurationSettings.AppSettings["Dimentions"];
+            var dimentions = dimentionsString.Split(',');
+            Dimentions = new List<int>();
+            foreach (var dimention in dimentions)
+            {
+                Dimentions.Add(Int32.Parse(dimention));
+            }
+            var gridsString = ConfigurationSettings.AppSettings["Grids"];
+            var grids = gridsString.Split(',');
+            Grids = new List<int>();
+            foreach (var grid in grids)
+            {
+                Grids.Add(Int32.Parse(grid));
+            }
         }
 
         private static SomLearningProcessor GetStandardLearningProcessor(int iterations, double startLearningRate, int wh, int dimentions)
