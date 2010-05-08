@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Som</RootNamespace>
     <AssemblyName>Som</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -56,15 +56,16 @@
     <Compile Include="ActivationFunction\IActivationFunction.cs" />
     <Compile Include="Data\CompletelyRandomDataProvider.cs" />
     <Compile Include="Data\DirectDataProvider.cs" />
-    <Compile Include="Data\Suffle\ISuffleProvider.cs" />
-    <Compile Include="Data\Suffle\NotSufflingProvider.cs" />
-    <Compile Include="Data\Suffle\SuffleProvider.cs" />
+    <Compile Include="Data\Shuffle\IShuffleProvider.cs" />
+    <Compile Include="Data\Shuffle\NotShufflingProvider.cs" />
+    <Compile Include="Data\Shuffle\ShuffleProvider.cs" />
     <Compile Include="Data\ILearningDataProvider.cs" />
     <Compile Include="Data\ILearningDataPersister.cs" />
-    <Compile Include="KohonenLearningProcessor\ConcurrencyLearningProcessor.cs" />
-    <Compile Include="KohonenLearningProcessor\LearningProcessor.cs" />
+    <Compile Include="LearningProcessor\ConcurrencySomLearningProcessor.cs" />
+    <Compile Include="LearningProcessor\MasterSlaveLearningProcessor.cs" />
+    <Compile Include="LearningProcessor\SomLearningProcessor.cs" />
     <Compile Include="Data\LearningDataProvider.cs" />
-    <Compile Include="Data\Suffle\SuffleList.cs" />
+    <Compile Include="Data\Shuffle\ShuffleList.cs" />
     <Compile Include="Data\TextFileLearningDataPersister.cs" />
     <Compile Include="Learning\ConstantFactorFunction.cs" />
     <Compile Include="Learning\ExponentionalFactorFunction.cs" />

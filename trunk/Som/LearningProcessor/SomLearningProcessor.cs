@@ -7,44 +7,52 @@ using Som.Metrics;
 using Som.Network;
 using Som.Topology;
 
-namespace Som.KohonenLearningProcessor
+namespace Som.LearningProcessor
 {
-    public class LearningProcessor
+    public class SomLearningProcessor
     {
         public INetwork Network { get; private set; }
         public ITopology Topology { get; private set; }
 
-        protected ISuffleProvider SuffleProvider { get; set; }
+        protected IShuffleProvider ShuffleProvider { get; set; }
         protected ILearningDataProvider LearningDataProvider { get; set; }
         protected IRadiusProvider RadiusProvider { get; private set; }
         protected INeighbourhoodFunction NeighbourhoodFunction { get; set; }
         protected IMetricFunction MetricFunction { get; set; }
         protected ILearningFactorFunction LearningFactorFunction { get; set; }
         
-        protected int MaxIterationsCount { get; set; }
+        public int MaxIterationsCount { get; protected set; }
 
-        public LearningProcessor(ILearningDataProvider learningDataProvider, INetwork network, ITopology topology, IMetricFunction metricFunction, ILearningFactorFunction learningFactorFunction, INeighbourhoodFunction neighbourhoodFunction, int maxIterationsCount, ISuffleProvider suffleProvider)
+        public SomLearningProcessor(
+            ILearningDataProvider learningDataProvider,
+            INetwork network,
+            IMetricFunction metricFunction,
+            ILearningFactorFunction learningFactorFunction,
+            INeighbourhoodFunction neighbourhoodFunction,
+            int maxIterationsCount,
+            IShuffleProvider shuffleProvider)
         {
             LearningDataProvider = learningDataProvider;
             Network = network;
-            Topology = topology;
+            Topology = network.Topology;
             MetricFunction = metricFunction;
             LearningFactorFunction = learningFactorFunction;
             NeighbourhoodFunction = neighbourhoodFunction;
             MaxIterationsCount = maxIterationsCount;
-            SuffleProvider = suffleProvider;
+            ShuffleProvider = shuffleProvider;
 
-            RadiusProvider = new DefaultRadiusProvider(maxIterationsCount, topology.WholeTopologyRadius);
+            RadiusProvider = new DefaultRadiusProvider(maxIterationsCount, Topology.WholeTopologyRadius);
         }
 
         public virtual void Learn()
         {
             int vectorsCount = LearningDataProvider.LearningVectorsCount;
-            IList<int> suffleList = new SuffleList(vectorsCount);
+            IList<int> suffleList = new ShuffleList(vectorsCount);
 
             for (int iteration = 0; iteration < MaxIterationsCount; iteration++)
             {
-                suffleList = SuffleProvider.Suffle(suffleList);
+                if ((iteration % 1000) == 0) Console.Write(string.Format("{0} ", iteration));
+                suffleList = ShuffleProvider.Suffle(suffleList);
 
                 for (int dataInd = 0; dataInd < vectorsCount; dataInd++)
                 {
@@ -57,7 +65,7 @@ namespace Som.KohonenLearningProcessor
             }
         }
 
-        protected virtual int FindBestMatchingNeuron(double[] dataVector)
+        public virtual int FindBestMatchingNeuron(double[] dataVector)
         {
             int result = -1;
             Double minDistance = Double.MaxValue;
@@ -73,7 +81,7 @@ namespace Som.KohonenLearningProcessor
             return result;
         }
 
-        protected virtual void AccommodateNetworkWeights(int bestNeuronNum, double[] dataVector, int iteration)
+        public virtual void AccommodateNetworkWeights(int bestNeuronNum, double[] dataVector, int iteration)
         {
             var radius = RadiusProvider.GetRadius(iteration);
             var effectedNeurons = Topology.GetNeuronsInRadius(bestNeuronNum, radius);

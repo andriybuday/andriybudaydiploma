@@ -15,7 +15,7 @@ namespace Som.Tests.LearningData
         [Test]
         public void ValidateShuffleMethod()
         {
-            var suffleList = new SuffleList(10);
+            var suffleList = new ShuffleList(10);
             Assert.That(suffleList[0], Is.EqualTo(0));
             Assert.That(suffleList[1], Is.EqualTo(1));
             Assert.That(suffleList[9], Is.EqualTo(9));

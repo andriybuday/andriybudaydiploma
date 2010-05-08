@@ -4,9 +4,9 @@ using System.IO;
 using Som.ActivationFunction;
 using Som.Application.Base;
 using Som.Data.Suffle;
-using Som.KohonenLearningProcessor;
 using Som.Learning;
 using Som.Data;
+using Som.LearningProcessor;
 using Som.Metrics;
 using Som.Network;
 using Som.Topology;
@@ -17,7 +17,7 @@ namespace Som.Application.Clusterization
     {
         private ILearningDataProvider LearningDataProvider { get; set; }
         private IMetricFunction MetricFunction { get; set; }
-        private LearningProcessor LearningProcessor;
+        private SomLearningProcessor SomLearningProcessor;
 
 
         public AnimalsClusterizationController()
@@ -62,25 +62,25 @@ namespace Som.Application.Clusterization
             MetricFunction = new EuclideanMetricFunction();
             ILearningFactorFunction learningFactorFunction = new ExponentionalFactorFunction(startLearningRate, iterations);
             INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
-            ISuffleProvider suffleProvider = new SuffleProvider();
+            IShuffleProvider shuffleProvider = new ShuffleProvider();
 
-            LearningProcessor = new LearningProcessor(
-                LearningDataProvider, network, topology, MetricFunction, learningFactorFunction, neighbourhoodFunction, 1000, suffleProvider);
+            SomLearningProcessor = new SomLearningProcessor(
+                LearningDataProvider, network, MetricFunction, learningFactorFunction, neighbourhoodFunction, 1000, shuffleProvider);
         }
 
         public void Learn()
         {
-            LearningProcessor.Learn();
+            SomLearningProcessor.Learn();
         }
 
         public ITopology GetTopology()
         {
-            return LearningProcessor.Topology;
+            return SomLearningProcessor.Topology;
         }
 
         public IList<INeuron> GetNetworkNeurons()
         {
-            return LearningProcessor.Network.Neurons;
+            return SomLearningProcessor.Network.Neurons;
         }
 
         public string GetBestName(INeuron networkNeuron)

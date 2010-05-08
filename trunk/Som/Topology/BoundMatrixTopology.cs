@@ -52,6 +52,11 @@ namespace Som.Topology
             return Standart_GetNeuronsInRadius(neuronNumber);
         }
 
+        public bool Overlaps(int neuronA, int neuronB, double radius)
+        {
+            return true;
+        }
+
         private Dictionary<int, double> Standart_GetNeuronsInRadius(int neuronNumber)
         {
             var result = new Dictionary<int, double>();
