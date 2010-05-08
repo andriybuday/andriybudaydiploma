@@ -9,7 +9,12 @@ using Som.Topology;
 
 namespace Som.LearningProcessor
 {
-    public class SomLearningProcessor
+    public interface ILearningProcessor
+    {
+        void Learn();
+    }
+
+    public class SomLearningProcessor : ILearningProcessor
     {
         public INetwork Network { get; private set; }
         public ITopology Topology { get; private set; }
@@ -51,7 +56,7 @@ namespace Som.LearningProcessor
 
             for (int iteration = 0; iteration < MaxIterationsCount; iteration++)
             {
-                if ((iteration % 1000) == 0) Console.Write(string.Format("{0} ", iteration));
+                //if ((iteration % 1000) == 0) Console.Write(string.Format("{0} ", iteration));
                 suffleList = ShuffleProvider.Suffle(suffleList);
 
                 for (int dataInd = 0; dataInd < vectorsCount; dataInd++)
@@ -108,4 +113,5 @@ namespace Som.LearningProcessor
             }
         }
     }
+
 }
