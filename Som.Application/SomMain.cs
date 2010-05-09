@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Som.Application.Base;
 using Som.Application.Clusterization;
@@ -16,6 +17,7 @@ namespace Som.Application
     {
         public SomMain()
         {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             InitializeComponent();
         }
 

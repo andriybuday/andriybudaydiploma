@@ -6,20 +6,24 @@ namespace Som.Application.Clusterization
 {
     public partial class AnimalsClusterization : Form
     {
+        public string FileName { get; set; }
         public AnimalsClusterization(AnimalsClusterizationController controller)
         {
             InitializeComponent();
             Controller = controller;
+            FileName = "Zoo.data";
+            textBoxFileName.Text = FileName;
         }
 
         private void btnLoadData_Click(object sender, System.EventArgs e)
         {
-            //var openFileDialog = new OpenFileDialog();
-            //if (openFileDialog.ShowDialog() == DialogResult.OK)
-            //{
-            //    Controller.LoadData(openFileDialog.FileName);
-            //}
-            Controller.LoadData(@"D:\Education\Diploma\SomParallelization\Som.Application\Clusterization\Zoo.data");    
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Data files *.data|*.data";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                FileName = openFileDialog.FileName;
+            }
+            Controller.LoadData(FileName);    
         }
 
         protected AnimalsClusterizationController Controller { get; set; }
@@ -82,6 +86,11 @@ namespace Som.Application.Clusterization
                 case ("Cat"): return Color.Red;
                 case ("Tiger"): return Color.Red;
                 case ("Lion"): return Color.Red;
+
+                case ("Iris-virginica"): return Color.Green;
+                case ("Iris-versicolor"): return Color.Red;
+                case ("Iris-setosa"): return Color.Blue;
+
                 default:
                     return Color.White;
             }
@@ -89,7 +98,7 @@ namespace Som.Application.Clusterization
 
         private void button1_Click(object sender, EventArgs e)
         {
-            btnLoadData_Click(sender, e);
+         //   btnLoadData_Click(sender, e);
             btnLearn_Click(sender, e);
             btnDrawMap_Click(sender, e);
         }

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace Som.Topology
 {
     public class SimpleMatrixTopology : ITopology
     {
+        private int _n;
         public int RowCount { get; private set; }
         public int ColCount { get; private set; }
         public double WholeTopologyRadius { get; private set; }
@@ -13,11 +16,15 @@ namespace Som.Topology
         {
             ColCount = colCount;
             RowCount = rowCount;
+            _n = RowCount*ColCount;
+            //var bitArray = new BitArray(NeuronsCount, false);
+            //bitArray.
+
 
             WholeTopologyRadius = Math.Max(ColCount, RowCount) / 2.0;
         }
 
-        public int NeuronsCount { get { return RowCount * ColCount; } }
+        public int NeuronsCount { get { return _n; } }
 
         public int GetNeuronNumber(Location location)
         {
