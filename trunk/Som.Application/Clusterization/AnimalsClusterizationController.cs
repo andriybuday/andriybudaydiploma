@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Som.ActivationFunction;
 using Som.Application.Base;
-using Som.Data.Suffle;
+using Som.Data.Shuffle;
 using Som.Learning;
 using Som.Data;
 using Som.LearningProcessor;

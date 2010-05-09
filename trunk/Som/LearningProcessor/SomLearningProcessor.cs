@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Som.Data.Suffle;
+using Som.Data.Shuffle;
 using Som.Learning;
 using Som.Data;
 using Som.Metrics;

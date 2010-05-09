@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Som.ActivationFunction;
 using Som.Data;
-using Som.Data.Suffle;
+using Som.Data.Shuffle;
 using Som.Learning;
 using Som.LearningProcessor;
 using Som.Metrics;
