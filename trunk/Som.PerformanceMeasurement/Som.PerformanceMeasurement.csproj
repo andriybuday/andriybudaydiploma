@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SomProcessorsFactory.cs" />
+    <Compile Include="TestResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Som\Som.csproj">

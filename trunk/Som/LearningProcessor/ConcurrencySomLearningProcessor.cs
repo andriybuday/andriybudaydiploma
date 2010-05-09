@@ -26,7 +26,7 @@ namespace Som.LearningProcessor
             IShuffleProvider shuffleProvider)
             : base(learningDataProvider, network, metricFunction, learningFactorFunction, neighbourhoodFunction, maxIterationsCount, shuffleProvider)
         {
-            GridDivideNumber = 4;
+            GridDivideNumber = 2;
             DoneEvents = new ManualResetEvent[GridDivideNumber];
         }
 
@@ -75,7 +75,7 @@ namespace Som.LearningProcessor
             var effectedNeurons = Topology.GetNeuronsInRadius(bestNeuronNum, radius);
 
             var effectedNeuronsCount = effectedNeurons.Count;
-            if (effectedNeuronsCount >= 100)
+            if (effectedNeuronsCount >= 10)
             {
                 int sectionLength = effectedNeuronsCount / GridDivideNumber;
                 int start = 0;
