@@ -23,7 +23,7 @@ namespace Som.Data
             while((line = streamReader.ReadLine()) != null)
             {
                 var values = new List<double>();
-                string[] stringValues = line.Split(new char[] {' ', '\t'});
+                string[] stringValues = line.Split(new char[] {',', ' ', '\t'});
                 foreach (var svalue in stringValues)
                 {
                     double value;

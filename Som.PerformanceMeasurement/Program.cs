@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
+using System.Xml.Serialization;
 using Som.ActivationFunction;
 using Som.Data;
 using Som.Data.Suffle;
@@ -13,34 +15,6 @@ using Som.Topology;
 
 namespace Som.PerformanceMeasurement
 {
-    public class TestResult
-    {
-        public TestResult(int iterations, string gridSize, int inputSpaceDimentions)
-        {
-            Iterations = iterations;
-            GridSize = gridSize;
-            InputSpaceDimentions = inputSpaceDimentions;
-            TimeStat = new List<AlgorithmTime>();
-        }
-
-        public int Iterations { get; private set; }
-        public string GridSize { get; private set; }
-        public int InputSpaceDimentions { get; private set; }
-        public List<AlgorithmTime> TimeStat { get; set; }
-    }
-
-    public class AlgorithmTime
-    {
-        public AlgorithmTime(string algoName, double aveTime)
-        {
-            AlgoName = algoName;
-            AverageTime = aveTime;
-        }
-
-        public string AlgoName { get; private set; }
-        public double AverageTime { get; private set; }
-    }
-
     public class Program
     {
         public static void Main(String[] args)
@@ -67,21 +41,33 @@ namespace Som.PerformanceMeasurement
                     testResults.Add(testResult);
                 }
             }
+            SaveTestResults(testResults);
             Console.WriteLine("End.");
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
+        }
+
+        private void SaveTestResults(List<TestResult> testResults)
+        {
+            string fileName = string.Format("ResultsFor_{0}_{1}_{2}_{3}_{4}.xml", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute);
+            var streamWriter = File.CreateText(fileName);
+            var xmlSerializer = new XmlSerializer(typeof (List<TestResult>));
+            xmlSerializer.Serialize(streamWriter,testResults);
+            streamWriter.Close();
         }
 
         private TestResult GetOneTestResult(int gridSideSize, int dimention)
         {
             var testResult = new TestResult(Iterations, string.Format("{0}X{1}", gridSideSize, gridSideSize), dimention);
 
-            SomLearningProcessor somLearningProcessor = GetStandardLearningProcessor(Iterations, 0.07, gridSideSize, dimention);
+            var somProcessorsFactory = new SomProcessorsFactory(Iterations,dimention, gridSideSize, 0.07);
+
+            SomLearningProcessor somLearningProcessor = somProcessorsFactory.GetStandardLearningProcessor(Iterations, 0.07, gridSideSize, dimention);
             var timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
             testResult.TimeStat.Add(new AlgorithmTime("Standard", timeForAlgo));
             Console.WriteLine("Standard:{0}", timeForAlgo);
 
-            somLearningProcessor = GetParallelLearningProcessor(Iterations, 0.07, gridSideSize, dimention);
+            somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(Iterations, 0.07, gridSideSize, dimention);
             timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
             testResult.TimeStat.Add(new AlgorithmTime("Paralleled", timeForAlgo));
             Console.WriteLine("Paralleled:{0}", timeForAlgo);
@@ -137,61 +123,6 @@ namespace Som.PerformanceMeasurement
             }
         }
 
-        private static SomLearningProcessor GetStandardLearningProcessor(int iterations, double startLearningRate, int wh, int dimentions)
-        {
 
-            //learning data
-            ILearningDataProvider LearningDataProvider = new CompletelyRandomDataProvider(dimentions, 1);
-
-            var dataVectorDimention = LearningDataProvider.DataVectorDimention;
-            var maxWeights = new List<double>();
-            for (int i = 0; i < dataVectorDimention; i++)
-            {
-                maxWeights.Add(1);
-            }
-
-            ITopology topology = new SimpleMatrixTopology(wh, wh);
-
-            IActivationFunction activationFunction = new TransparentActivationFunction(new double[] { });
-
-            INetwork network = new NetworkBase(true, maxWeights, activationFunction, topology);
-
-            IMetricFunction metricFunction = new EuclideanMetricFunction();
-            ILearningFactorFunction learningFactorFunction = new ExponentionalFactorFunction(startLearningRate, iterations);
-            INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
-            IShuffleProvider shuffleProvider = new NotShufflingProvider();
-            SomLearningProcessor somLearningProcessor = new SomLearningProcessor(LearningDataProvider, network, metricFunction, learningFactorFunction, neighbourhoodFunction, iterations, shuffleProvider);
-
-            return somLearningProcessor;
-        }
-
-        private static SomLearningProcessor GetParallelLearningProcessor(int iterations, double startLearningRate, int wh, int dimentions)
-        {
-
-            //learning data
-            ILearningDataProvider LearningDataProvider = new CompletelyRandomDataProvider(dimentions, 1);
-
-            var dataVectorDimention = LearningDataProvider.DataVectorDimention;
-            var maxWeights = new List<double>();
-            for (int i = 0; i < dataVectorDimention; i++)
-            {
-                maxWeights.Add(1);
-            }
-
-            ITopology topology = new SimpleMatrixTopology(wh, wh);
-
-            IActivationFunction activationFunction = new TransparentActivationFunction(new double[] { });
-
-            INetwork network = new NetworkBase(true, maxWeights, activationFunction, topology);
-
-            IMetricFunction metricFunction = new EuclideanMetricFunction();
-            ILearningFactorFunction learningFactorFunction = new ExponentionalFactorFunction(startLearningRate, iterations);
-            INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
-            IShuffleProvider shuffleProvider = new NotShufflingProvider();
-            //somLearningProcessor somLearningProcessor = new somLearningProcessor(LearningDataProvider, network, topology, metricFunction, learningFactorFunction, neighbourhoodFunction, iterations, shuffleProvider);
-            SomLearningProcessor somLearningProcessor = new ConcurrencySomLearningProcessor(LearningDataProvider, network, metricFunction, learningFactorFunction, neighbourhoodFunction, iterations, shuffleProvider);
-
-            return somLearningProcessor;
-        }
     }
 }
