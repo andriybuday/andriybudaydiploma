@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Som.Data;
-using Som.Data.Suffle;
+using Som.Data.Shuffle;
 using Som.Learning;
 using Som.Metrics;
 using Som.Network;

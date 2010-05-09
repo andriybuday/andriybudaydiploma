@@ -5,7 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Som.Data;
-using Som.Data.Suffle;
+using Som.Data.Shuffle;
 
 namespace Som.Tests.LearningData
 {

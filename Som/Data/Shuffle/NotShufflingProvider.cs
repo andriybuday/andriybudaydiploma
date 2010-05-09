@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Som.Data.Suffle
+namespace Som.Data.Shuffle
 {
     public class NotShufflingProvider : IShuffleProvider
     {
