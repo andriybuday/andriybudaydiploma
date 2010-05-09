@@ -27,8 +27,11 @@ namespace Som.Data
                 foreach (var svalue in stringValues)
                 {
                     double value;
-                    Double.TryParse(svalue, out value);
-                    values.Add(value);
+                    var parsed = Double.TryParse(svalue, out value);
+                    if(parsed)
+                    {
+                        values.Add(value);
+                    }
                 }
 
                 if (latestRowElements < 0)

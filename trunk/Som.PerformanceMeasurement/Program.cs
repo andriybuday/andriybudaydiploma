@@ -3,14 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Xml.Serialization;
-using Som.ActivationFunction;
-using Som.Data;
-using Som.Learning;
 using Som.LearningProcessor;
-using Som.Metrics;
-using Som.Network;
-using Som.Topology;
 
 namespace PerformanceMeasurement
 {
@@ -18,9 +13,9 @@ namespace PerformanceMeasurement
     {
         public static void Main(String[] args)
         {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             Program program = new Program();
             program.Run();
-
         }
 
         private void Run()
@@ -61,12 +56,12 @@ namespace PerformanceMeasurement
 
             SomProcessorsFactory somProcessorsFactory = new SomProcessorsFactory(Iterations, dimention, gridSideSize, 0.07);
 
-            SomLearningProcessor somLearningProcessor = somProcessorsFactory.GetStandardLearningProcessor(Iterations, 0.07, gridSideSize, dimention);
+            SomLearningProcessor somLearningProcessor = somProcessorsFactory.GetStandardLearningProcessor();
             double timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
             testResult.TimeStat.Add(new AlgorithmTime("Standard", timeForAlgo));
             Console.WriteLine("Standard:{0}", timeForAlgo);
 
-            somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(Iterations, 0.07, gridSideSize, dimention);
+            somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor();
             timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
             testResult.TimeStat.Add(new AlgorithmTime("Paralleled", timeForAlgo));
             Console.WriteLine("Paralleled:{0}", timeForAlgo);

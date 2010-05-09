@@ -109,8 +109,18 @@ namespace Som.Application.Clusterization
                 string line;
                 while ((line = streamReader.ReadLine()) != null)
                 {
-                    var strings = line.Split(new char[] {' '});
-                    names.Add(strings[0]);
+                    var strings = line.Split(new char[] {' ', ','});
+                    double d;
+                    var firstParsable = Double.TryParse(strings[0], out d);
+                    //var lastParsable = Double.TryParse(strings[strings.Length - 1], out d);
+                    if(firstParsable)
+                    {
+                        names.Add(strings[strings.Length - 1]);    
+                    }
+                    else
+                    {
+                        names.Add(strings[0]);    
+                    }
                 }
             }
             return names;

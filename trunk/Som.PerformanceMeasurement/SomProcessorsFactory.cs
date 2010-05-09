@@ -12,10 +12,17 @@ namespace PerformanceMeasurement
 {
     public class SomProcessorsFactory
     {
+        private EuclideanMetricFunction metricFunction;
+        private ILearningFactorFunction learningFactorFunction;
+        private INeighbourhoodFunction neighbourhoodFunction;
+        private IShuffleProvider shuffleProvider;
         public int Iterations { get; private set; }
         public int Dimentions { get; private set; }
         public int GridOneSideSize { get; private set; }
         public double StartLearningRate { get; private set; }
+
+        ILearningDataProvider LearningDataProvider { get; set; }
+        INetwork Network { get; set; }
 
         public SomProcessorsFactory(int iterations, int dimentions, int gridOneSideSize, double startLearningRate)
         {
@@ -23,13 +30,11 @@ namespace PerformanceMeasurement
             Dimentions = dimentions;
             GridOneSideSize = gridOneSideSize;
             StartLearningRate = startLearningRate;
-        }
 
-        public SomLearningProcessor GetStandardLearningProcessor(int iterations, double startLearningRate, int wh, int dimentions)
-        {
 
-            //learning data
-            ILearningDataProvider LearningDataProvider = new CompletelyRandomDataProvider(dimentions, 1);
+            ILearningDataPersister learningDataPersister = new TextFileLearningDataPersister("iris.data");
+            LearningDataProvider = new LearningDataProvider(learningDataPersister);
+
 
             int dataVectorDimention = LearningDataProvider.DataVectorDimention;
             List<double> maxWeights = new List<double>();
@@ -38,47 +43,28 @@ namespace PerformanceMeasurement
                 maxWeights.Add(1);
             }
 
-            ITopology topology = new SimpleMatrixTopology(wh, wh);
+            ITopology topology = new SimpleMatrixTopology(gridOneSideSize, gridOneSideSize);
 
             IActivationFunction activationFunction = new TransparentActivationFunction(new double[] { });
 
-            INetwork network = new NetworkBase(true, maxWeights, activationFunction, topology);
+            Network = new NetworkBase(true, maxWeights, activationFunction, topology);
 
-            IMetricFunction metricFunction = new EuclideanMetricFunction();
-            ILearningFactorFunction learningFactorFunction = new ExponentionalFactorFunction(startLearningRate, iterations);
-            INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
-            IShuffleProvider shuffleProvider = new NotShufflingProvider();
-            SomLearningProcessor somLearningProcessor = new SomLearningProcessor(LearningDataProvider, network, metricFunction, learningFactorFunction, neighbourhoodFunction, iterations, shuffleProvider);
+            metricFunction = new EuclideanMetricFunction();
+            learningFactorFunction = new ExponentionalFactorFunction(startLearningRate, iterations);
+            neighbourhoodFunction = new GaussNeighbourhoodFunction();
+            shuffleProvider = new NotShufflingProvider();
+        }
+
+        public SomLearningProcessor GetStandardLearningProcessor()
+        {
+            SomLearningProcessor somLearningProcessor = new SomLearningProcessor(LearningDataProvider, Network, metricFunction, learningFactorFunction, neighbourhoodFunction, Iterations, shuffleProvider);
 
             return somLearningProcessor;
         }
 
-        public SomLearningProcessor GetParallelLearningProcessor(int iterations, double startLearningRate, int wh, int dimentions)
+        public SomLearningProcessor GetParallelLearningProcessor()
         {
-
-            //learning data
-            ILearningDataProvider LearningDataProvider = new CompletelyRandomDataProvider(dimentions, 1);
-
-            int dataVectorDimention = LearningDataProvider.DataVectorDimention;
-            List<double> maxWeights = new List<double>();
-            for (int i = 0; i < dataVectorDimention; i++)
-            {
-                maxWeights.Add(1);
-            }
-
-            ITopology topology = new SimpleMatrixTopology(wh, wh);
-
-            IActivationFunction activationFunction = new TransparentActivationFunction(new double[] { });
-
-            INetwork network = new NetworkBase(true, maxWeights, activationFunction, topology);
-
-            IMetricFunction metricFunction = new EuclideanMetricFunction();
-            ILearningFactorFunction learningFactorFunction = new ExponentionalFactorFunction(startLearningRate, iterations);
-            INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
-            IShuffleProvider shuffleProvider = new NotShufflingProvider();
-            //somLearningProcessor somLearningProcessor = new somLearningProcessor(LearningDataProvider, network, topology, metricFunction, learningFactorFunction, neighbourhoodFunction, iterations, shuffleProvider);
-            SomLearningProcessor somLearningProcessor = new ConcurrencySomLearningProcessor(LearningDataProvider, network, metricFunction, learningFactorFunction, neighbourhoodFunction, iterations, shuffleProvider);
-
+            SomLearningProcessor somLearningProcessor = new ConcurrencySomLearningProcessor(LearningDataProvider, Network, metricFunction, learningFactorFunction, neighbourhoodFunction, Iterations, shuffleProvider);
             return somLearningProcessor;
         }
     }
