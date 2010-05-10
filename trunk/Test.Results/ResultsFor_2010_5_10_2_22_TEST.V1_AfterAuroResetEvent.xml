@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTestResult xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TestResult>
+    <Iterations>200</Iterations>
+    <GridSize>10X10</GridSize>
+    <InputSpaceDimentions>4</InputSpaceDimentions>
+    <TimeStat>
+      <AlgorithmTime>
+        <AlgoName>Standard</AlgoName>
+        <AverageTime>384.26070000000004</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 2Thrs:</AlgoName>
+        <AverageTime>886.3919800000001</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 4Thrs:</AlgoName>
+        <AverageTime>1011.7329200000002</AverageTime>
+      </AlgorithmTime>
+    </TimeStat>
+  </TestResult>
+  <TestResult>
+    <Iterations>200</Iterations>
+    <GridSize>25X25</GridSize>
+    <InputSpaceDimentions>4</InputSpaceDimentions>
+    <TimeStat>
+      <AlgorithmTime>
+        <AlgoName>Standard</AlgoName>
+        <AverageTime>1659.3099800000002</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 2Thrs:</AlgoName>
+        <AverageTime>1775.2989200000002</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 4Thrs:</AlgoName>
+        <AverageTime>1961.6604800000002</AverageTime>
+      </AlgorithmTime>
+    </TimeStat>
+  </TestResult>
+  <TestResult>
+    <Iterations>200</Iterations>
+    <GridSize>50X50</GridSize>
+    <InputSpaceDimentions>4</InputSpaceDimentions>
+    <TimeStat>
+      <AlgorithmTime>
+        <AlgoName>Standard</AlgoName>
+        <AverageTime>6139.5470000000005</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 2Thrs:</AlgoName>
+        <AverageTime>3916.8262600000003</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 4Thrs:</AlgoName>
+        <AverageTime>4263.6134600000005</AverageTime>
+      </AlgorithmTime>
+    </TimeStat>
+  </TestResult>
+</ArrayOfTestResult>
