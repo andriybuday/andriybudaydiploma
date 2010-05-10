@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="ActivationFunction\HardLimitActivationFunction.cs" />
     <Compile Include="ActivationFunction\IActivationFunction.cs" />
+    <Compile Include="Concurrency\DivideGridAndAccomodationArea.cs" />
     <Compile Include="Data\CompletelyRandomDataProvider.cs" />
     <Compile Include="Data\DirectDataProvider.cs" />
     <Compile Include="Data\Shuffle\IShuffleProvider.cs" />
@@ -61,8 +62,6 @@
     <Compile Include="Data\Shuffle\ShuffleProvider.cs" />
     <Compile Include="Data\ILearningDataProvider.cs" />
     <Compile Include="Data\ILearningDataPersister.cs" />
-    <Compile Include="LearningProcessor\ConcurrencySomLearningProcessor.cs" />
-    <Compile Include="LearningProcessor\MasterSlaveLearningProcessor.cs" />
     <Compile Include="LearningProcessor\SomLearningProcessor.cs" />
     <Compile Include="Data\LearningDataProvider.cs" />
     <Compile Include="Data\Shuffle\ShuffleList.cs" />

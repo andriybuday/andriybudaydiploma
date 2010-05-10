@@ -10,11 +10,15 @@ namespace Som.Topology
         public int ColCount { get; private set; }
         public double WholeTopologyRadius { get; set; }
 
+        public double[] DistancesToWinner{ get; private set;}
+
         public BoundMatrixTopology(int rowCount, int colCount)
         {
             ColCount = colCount;
             RowCount = rowCount;
             WholeTopologyRadius = Math.Max(rowCount, colCount) / 2.0;
+
+            DistancesToWinner = new double[NeuronsCount];
         }
 
         public int NeuronsCount { get { return RowCount * ColCount; } }
@@ -45,7 +49,7 @@ namespace Som.Topology
             return new List<int>() { upper, down, right, left };
         }
 
-        public Dictionary<int, double> GetNeuronsInRadius(int neuronNumber, double radius)
+        public List<int> GetNeuronsInRadius(int neuronNumber, double radius)
         {
             //return Optimized_GetNeuronsInRadius(neuronNumber, Radius);
 
@@ -57,10 +61,11 @@ namespace Som.Topology
             return true;
         }
 
-        private Dictionary<int, double> Standart_GetNeuronsInRadius(int neuronNumber)
+        private List<int> Standart_GetNeuronsInRadius(int neuronNumber)
         {
-            var result = new Dictionary<int, double>();
-            result.Add(neuronNumber, 0);
+            var result = new List<int>();
+            result.Add(neuronNumber);
+            DistancesToWinner[neuronNumber] = 0;
 
             var bfsQueue = new List<int>();
             bfsQueue.Add(neuronNumber);
@@ -77,9 +82,12 @@ namespace Som.Topology
 
                     foreach (var connectedNeuronInd in currentDirectlyConnected)
                     {
-                        if(!result.ContainsKey(connectedNeuronInd))
-                            if(connectedNeuronInd < NeuronsCount)
-                                result[connectedNeuronInd] = i+1;
+                        if(!result.Contains(connectedNeuronInd))
+                            if (connectedNeuronInd < NeuronsCount)
+                            {
+                                result.Add(connectedNeuronInd);
+                                DistancesToWinner[connectedNeuronInd] = i + 1;
+                            }
                     }
                 }
                 bfsQueue.Clear();
@@ -89,7 +97,7 @@ namespace Som.Topology
             return result;
         }
 
-        public Dictionary<int, double > Optimized_GetNeuronsInRadius(int neuronNumber, double radius)
+        public List<int> Optimized_GetNeuronsInRadius(int neuronNumber, double radius)
         {
             var neuronsCount = RowCount * ColCount;
             var neuronRowPos = neuronNumber % ColCount;
@@ -100,8 +108,9 @@ namespace Som.Topology
             var colStart = neuronNumber % ColCount;
             var colEnd = colStart + (RowCount-1)*ColCount;
 
-            var result = new Dictionary<int, double>();
-            result.Add(neuronNumber, 0);
+            var result = new List<int>();
+            result.Add(neuronNumber);
+            DistancesToWinner[neuronNumber] = 0;
 
             if(sR > RowCount*RowCount + ColCount+ColCount)
             {
@@ -143,7 +152,7 @@ namespace Som.Topology
             return result;
         }
 
-        private void GetNeuronsInCurrentRow(int currRowStart, int currRowEnd, int neuronRowPos, int intDistFromCenter, int level, Dictionary<int, double> result)
+        private void GetNeuronsInCurrentRow(int currRowStart, int currRowEnd, int neuronRowPos, int intDistFromCenter, int level, List<int> result)
         {
             var left = currRowStart + neuronRowPos - intDistFromCenter;
             var right = currRowStart + neuronRowPos + intDistFromCenter;
@@ -152,21 +161,45 @@ namespace Som.Topology
 
             if(2 * intDistFromCenter >= ColCount)
             {
-                for (int i = currRowStart; i <= currRowEnd; i++) result[i] = DIST_SHOULD_BE_CALCULATED;
+                for (int i = currRowStart; i <= currRowEnd; i++)
+                {
+                    result.Add(i);
+                    DistancesToWinner[i] = DIST_SHOULD_BE_CALCULATED;
+                }
             }
             else if(left < currRowStart)
             {
-                for (int i = ColCount + left; i <= currRowEnd; ++i) result[i] = DIST_SHOULD_BE_CALCULATED;
-                for (int i = currRowStart; i <= right; ++i) result[i] = DIST_SHOULD_BE_CALCULATED;
+                for (int i = ColCount + left; i <= currRowEnd; ++i)
+                {
+                    result.Add(i);
+                    DistancesToWinner[i] = DIST_SHOULD_BE_CALCULATED;
+                }
+                for (int i = currRowStart; i <= right; ++i)
+                {
+                    result.Add(i);
+                    DistancesToWinner[i] = DIST_SHOULD_BE_CALCULATED;
+                }
             }
             else if (right > currRowEnd)
             {
-                for (int i = currRowStart; i <= right - ColCount; ++i) result[i] = DIST_SHOULD_BE_CALCULATED;
-                for (int i = left; i <= currRowEnd; ++i) result[i] = DIST_SHOULD_BE_CALCULATED;
+                for (int i = currRowStart; i <= right - ColCount; ++i)
+                {
+                    result.Add(i);
+                    DistancesToWinner[i] = DIST_SHOULD_BE_CALCULATED;
+                }
+                for (int i = left; i <= currRowEnd; ++i)
+                {
+                    result.Add(i);
+                    DistancesToWinner[i] = DIST_SHOULD_BE_CALCULATED;
+                }
             }
             else
             {
-                for (int i = left; i <= right; i++) result[i] = DIST_SHOULD_BE_CALCULATED;
+                for (int i = left; i <= right; i++)
+                {
+                    result.Add(i);
+                    DistancesToWinner[i] = DIST_SHOULD_BE_CALCULATED;
+                }
             }
         }
     }

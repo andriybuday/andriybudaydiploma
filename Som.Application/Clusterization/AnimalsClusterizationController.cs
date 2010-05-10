@@ -17,7 +17,7 @@ namespace Som.Application.Clusterization
     {
         private ILearningDataProvider LearningDataProvider { get; set; }
         private IMetricFunction MetricFunction { get; set; }
-        private SomLearningProcessor SomLearningProcessor;
+        private ILearningProcessor SomLearningProcessor;
 
 
         public AnimalsClusterizationController()
@@ -64,8 +64,10 @@ namespace Som.Application.Clusterization
             INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
             IShuffleProvider shuffleProvider = new ShuffleProvider();
 
-            SomLearningProcessor = new SomLearningProcessor(
-                LearningDataProvider, network, MetricFunction, learningFactorFunction, neighbourhoodFunction, 1000, shuffleProvider);
+            SomLearningProcessor = new DivideGridAndAccomodationArea(
+                LearningDataProvider, network, MetricFunction, learningFactorFunction, neighbourhoodFunction, 1000, shuffleProvider, 2);
+            //SomLearningProcessor = new SomLearningProcessor(
+            //    LearningDataProvider, network, MetricFunction, learningFactorFunction, neighbourhoodFunction, 1000, shuffleProvider);
         }
 
         public void Learn()

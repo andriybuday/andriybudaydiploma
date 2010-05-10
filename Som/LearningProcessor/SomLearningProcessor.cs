@@ -12,6 +12,11 @@ namespace Som.LearningProcessor
     public interface ILearningProcessor
     {
         void Learn();
+        ITopology Topology { get; }
+        INetwork Network { get; }
+        int MaxIterationsCount { get; }
+        int FindBestMatchingNeuron(double[] dataVector);
+        void AccommodateNetworkWeights(int bmnIndex, double[] dataVector, int iteration);
     }
 
     public class SomLearningProcessor : ILearningProcessor
@@ -74,7 +79,7 @@ namespace Som.LearningProcessor
         {
             int result = -1;
             Double minDistance = Double.MaxValue;
-            for (int i = 0; i < Network.Neurons.Count; i++)
+            for (int i = 0; i < Network.Neurons.Length; i++)
             {
                 double distance = MetricFunction.GetDistance(Network.Neurons[i].Weights, dataVector);
                 if (distance < minDistance)
@@ -91,9 +96,9 @@ namespace Som.LearningProcessor
             var radius = RadiusProvider.GetRadius(iteration);
             var effectedNeurons = Topology.GetNeuronsInRadius(bestNeuronNum, radius);
 
-            foreach (var effectedNeuron in effectedNeurons.Keys)
+            foreach (var effectedNeuron in effectedNeurons)
             {
-                var distance = effectedNeurons[effectedNeuron];
+                var distance = Topology.DistancesToWinner[effectedNeuron];
 
                 AccommodateNeuronWeights(effectedNeuron, dataVector, iteration, distance, radius);
             }

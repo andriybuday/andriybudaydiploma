@@ -8,7 +8,7 @@ namespace Som.Network
     {
         double[] Weights { get; set; }
 
-        Double GetReaction(IList<Double> inputVector);
+        double GetReaction(double[] inputVector);
 
         IActivationFunction ActivationFunction { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Som.ActivationFunction;
 using Som.Data;
 using Som.Data.Shuffle;
@@ -24,17 +25,22 @@ namespace PerformanceMeasurement
         ILearningDataProvider LearningDataProvider { get; set; }
         INetwork Network { get; set; }
 
-        public SomProcessorsFactory(int iterations, int dimentions, int gridOneSideSize, double startLearningRate)
+        public SomProcessorsFactory(int iterations, int dimentions, int gridOneSideSize, double startLearningRate, bool fromFile, string fileName)
         {
             Iterations = iterations;
             Dimentions = dimentions;
             GridOneSideSize = gridOneSideSize;
             StartLearningRate = startLearningRate;
 
-
-            ILearningDataPersister learningDataPersister = new TextFileLearningDataPersister("iris.data");
-            LearningDataProvider = new LearningDataProvider(learningDataPersister);
-
+            if (fromFile)
+            {
+                ILearningDataPersister learningDataPersister = new TextFileLearningDataPersister(fileName);
+                LearningDataProvider = new LearningDataProvider(learningDataPersister);
+            }
+            else
+            {
+                LearningDataProvider = new CompletelyRandomDataProvider(dimentions, 150);
+            }
 
             int dataVectorDimention = LearningDataProvider.DataVectorDimention;
             List<double> maxWeights = new List<double>();
@@ -55,16 +61,17 @@ namespace PerformanceMeasurement
             shuffleProvider = new NotShufflingProvider();
         }
 
-        public SomLearningProcessor GetStandardLearningProcessor()
+
+        public ILearningProcessor GetStandardLearningProcessor()
         {
-            SomLearningProcessor somLearningProcessor = new SomLearningProcessor(LearningDataProvider, Network, metricFunction, learningFactorFunction, neighbourhoodFunction, Iterations, shuffleProvider);
+            ILearningProcessor somLearningProcessor = new SomLearningProcessor(LearningDataProvider, Network, metricFunction, learningFactorFunction, neighbourhoodFunction, Iterations, shuffleProvider);
 
             return somLearningProcessor;
         }
 
-        public SomLearningProcessor GetParallelLearningProcessor()
+        public ILearningProcessor GetParallelLearningProcessor(int gridGroups)
         {
-            SomLearningProcessor somLearningProcessor = new ConcurrencySomLearningProcessor(LearningDataProvider, Network, metricFunction, learningFactorFunction, neighbourhoodFunction, Iterations, shuffleProvider);
+            ILearningProcessor somLearningProcessor = new DivideGridAndAccomodationArea(LearningDataProvider, Network, metricFunction, learningFactorFunction, neighbourhoodFunction, Iterations, shuffleProvider, gridGroups);
             return somLearningProcessor;
         }
     }

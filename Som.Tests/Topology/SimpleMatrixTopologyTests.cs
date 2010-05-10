@@ -12,7 +12,8 @@ namespace Som.Tests.Topology
         public void GetNeuronsInRadius_Radius0()
         {
             var matrixTopology = new SimpleMatrixTopology(10, 10);
-            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(77, 3);
+            var neuronsInRadius = matrixTopology.GetNeuronsInRadius(77, 3.01);
+            neuronsInRadius =  new List<int>();
         }
 
     }
