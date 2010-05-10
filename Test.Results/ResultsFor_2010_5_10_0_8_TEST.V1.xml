@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTestResult xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TestResult>
+    <Iterations>200</Iterations>
+    <GridSize>10X10</GridSize>
+    <InputSpaceDimentions>4</InputSpaceDimentions>
+    <TimeStat>
+      <AlgorithmTime>
+        <AlgoName>Standard</AlgoName>
+        <AverageTime>424.86382000000003</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 2Thrs:</AlgoName>
+        <AverageTime>1834.07192</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 4Thrs:</AlgoName>
+        <AverageTime>2653.2865</AverageTime>
+      </AlgorithmTime>
+    </TimeStat>
+  </TestResult>
+  <TestResult>
+    <Iterations>200</Iterations>
+    <GridSize>25X25</GridSize>
+    <InputSpaceDimentions>4</InputSpaceDimentions>
+    <TimeStat>
+      <AlgorithmTime>
+        <AlgoName>Standard</AlgoName>
+        <AverageTime>1849.4001000000003</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 2Thrs:</AlgoName>
+        <AverageTime>3005.26508</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 4Thrs:</AlgoName>
+        <AverageTime>3680.15038</AverageTime>
+      </AlgorithmTime>
+    </TimeStat>
+  </TestResult>
+  <TestResult>
+    <Iterations>200</Iterations>
+    <GridSize>50X50</GridSize>
+    <InputSpaceDimentions>4</InputSpaceDimentions>
+    <TimeStat>
+      <AlgorithmTime>
+        <AlgoName>Standard</AlgoName>
+        <AverageTime>6729.4673400000011</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 2Thrs:</AlgoName>
+        <AverageTime>6054.729440000001</AverageTime>
+      </AlgorithmTime>
+      <AlgorithmTime>
+        <AlgoName>Paralleled, 4Thrs:</AlgoName>
+        <AverageTime>7268.528980000001</AverageTime>
+      </AlgorithmTime>
+    </TimeStat>
+  </TestResult>
+</ArrayOfTestResult>
