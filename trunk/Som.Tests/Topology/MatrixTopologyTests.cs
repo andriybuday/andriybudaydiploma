@@ -14,7 +14,7 @@ namespace Som.Tests.Topology
             var neuronsInRadius = matrixTopology.GetNeuronsInRadius(15, 0);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(1));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(15));
+            Assert.IsTrue(neuronsInRadius.Contains(15));
         }
 
         [Test]
@@ -24,11 +24,11 @@ namespace Som.Tests.Topology
             var neuronsInRadius = matrixTopology.GetNeuronsInRadius(15, 1);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(5));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(15));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(9));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(16));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(21));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(14));
+            Assert.IsTrue(neuronsInRadius.Contains(15));
+            Assert.IsTrue(neuronsInRadius.Contains(9));
+            Assert.IsTrue(neuronsInRadius.Contains(16));
+            Assert.IsTrue(neuronsInRadius.Contains(21));
+            Assert.IsTrue(neuronsInRadius.Contains(14));
         }
 
         [Test]
@@ -38,11 +38,11 @@ namespace Som.Tests.Topology
             var neuronsInRadius = matrixTopology.GetNeuronsInRadius(23, 1);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(5));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(23));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(17));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(18));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(5));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(22));
+            Assert.IsTrue(neuronsInRadius.Contains(23));
+            Assert.IsTrue(neuronsInRadius.Contains(17));
+            Assert.IsTrue(neuronsInRadius.Contains(18));
+            Assert.IsTrue(neuronsInRadius.Contains(5));
+            Assert.IsTrue(neuronsInRadius.Contains(22));
         }
 
         [Test]
@@ -52,11 +52,11 @@ namespace Som.Tests.Topology
             var neuronsInRadius = matrixTopology.GetNeuronsInRadius(6, 1);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(5));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(6));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(0));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(7));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(12));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(12));
+            Assert.IsTrue(neuronsInRadius.Contains(6));
+            Assert.IsTrue(neuronsInRadius.Contains(0));
+            Assert.IsTrue(neuronsInRadius.Contains(7));
+            Assert.IsTrue(neuronsInRadius.Contains(12));
+            Assert.IsTrue(neuronsInRadius.Contains(12));
         }
 
         [Test]
@@ -66,17 +66,17 @@ namespace Som.Tests.Topology
             var neuronsInRadius = matrixTopology.GetNeuronsInRadius(3, 2);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(11));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(1));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(2));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(3));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(4));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(5));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(8));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(9));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(10));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(14));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(15));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(16));
+            Assert.IsTrue(neuronsInRadius.Contains(1));
+            Assert.IsTrue(neuronsInRadius.Contains(2));
+            Assert.IsTrue(neuronsInRadius.Contains(3));
+            Assert.IsTrue(neuronsInRadius.Contains(4));
+            Assert.IsTrue(neuronsInRadius.Contains(5));
+            Assert.IsTrue(neuronsInRadius.Contains(8));
+            Assert.IsTrue(neuronsInRadius.Contains(9));
+            Assert.IsTrue(neuronsInRadius.Contains(10));
+            Assert.IsTrue(neuronsInRadius.Contains(14));
+            Assert.IsTrue(neuronsInRadius.Contains(15));
+            Assert.IsTrue(neuronsInRadius.Contains(16));
         }
 
         [Test]
@@ -86,8 +86,8 @@ namespace Som.Tests.Topology
             var neuronsInRadius = matrixTopology.GetNeuronsInRadius(1, 7);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(2));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(1));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(0));
+            Assert.IsTrue(neuronsInRadius.Contains(1));
+            Assert.IsTrue(neuronsInRadius.Contains(0));
         }
 
         [Test]
@@ -97,14 +97,14 @@ namespace Som.Tests.Topology
             var neuronsInRadius = matrixTopology.GetNeuronsInRadius(88, 4);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(41));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(88));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(57));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(58));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(59));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(0));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(6));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(8));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(57));
+            Assert.IsTrue(neuronsInRadius.Contains(88));
+            Assert.IsTrue(neuronsInRadius.Contains(57));
+            Assert.IsTrue(neuronsInRadius.Contains(58));
+            Assert.IsTrue(neuronsInRadius.Contains(59));
+            Assert.IsTrue(neuronsInRadius.Contains(0));
+            Assert.IsTrue(neuronsInRadius.Contains(6));
+            Assert.IsTrue(neuronsInRadius.Contains(8));
+            Assert.IsTrue(neuronsInRadius.Contains(57));
         }
 
         [Test]
@@ -114,13 +114,13 @@ namespace Som.Tests.Topology
             var neuronsInRadius = matrixTopology.GetNeuronsInRadius(0, 2);
 
             Assert.That(neuronsInRadius.Count, Is.EqualTo(13));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(80));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(90));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(91));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(99));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(0));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(2));
-            Assert.IsTrue(neuronsInRadius.ContainsKey(20));
+            Assert.IsTrue(neuronsInRadius.Contains(80));
+            Assert.IsTrue(neuronsInRadius.Contains(90));
+            Assert.IsTrue(neuronsInRadius.Contains(91));
+            Assert.IsTrue(neuronsInRadius.Contains(99));
+            Assert.IsTrue(neuronsInRadius.Contains(0));
+            Assert.IsTrue(neuronsInRadius.Contains(2));
+            Assert.IsTrue(neuronsInRadius.Contains(20));
         }
 
         [Test]

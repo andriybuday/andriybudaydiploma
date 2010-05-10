@@ -10,26 +10,24 @@ namespace Som.Network
         public NetworkBase(bool randomize, IList<double> maxWeights, IActivationFunction activationFunction, ITopology topology)
         {
             Topology = topology;
-            Neurons = new List<INeuron>();
+            Neurons = new INeuron[topology.NeuronsCount];
             for (int i = 0; i < topology.NeuronsCount; i++)
             {
-                INeuron neuron = new NeuronBase(randomize, maxWeights, activationFunction);
-                Neurons.Add(neuron);
+                Neurons[i] = new NeuronBase(randomize, maxWeights, activationFunction);
             }
         }
 
         public NetworkBase(bool randomize, List<double> minWeights, List<double> maxWeights, IActivationFunction activationFunction, ITopology topology)
         {
             Topology = topology;
-            Neurons = new List<INeuron>();
+            Neurons = new INeuron[topology.NeuronsCount];
             for (int i = 0; i < topology.NeuronsCount; i++)
             {
-                INeuron neuron = new NeuronBase(randomize, minWeights, maxWeights, activationFunction);
-                Neurons.Add(neuron);
+                Neurons[i] = new NeuronBase(randomize, minWeights, maxWeights, activationFunction);
             }
         }
 
-        public IList<INeuron> Neurons { get; set; }
+        public INeuron[] Neurons { get; set; }
 
         public ITopology Topology { get; set; }
     }

@@ -14,6 +14,10 @@ namespace PerformanceMeasurement
         public static void Main(String[] args)
         {
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
+            // collect garbage now to minimize interference
+            GC.Collect();
+
             Program program = new Program();
             program.Run();
         }
@@ -24,19 +28,27 @@ namespace PerformanceMeasurement
 
             List<TestResult> testResults = new List<TestResult>();
 
+            Console.WriteLine("Tries to know average: {0}", Tests);
+            Console.WriteLine("Iterations: {0}", Iterations);
+            if (FromFile) Console.WriteLine("FromFile: {0}", FileName);
+
+            Console.WriteLine();
             Console.WriteLine("Start...");
+            Console.WriteLine();
+
             foreach (int gridSideSize in Grids)
             {
                 Console.WriteLine("Grid {0}X{0}...", gridSideSize);    
                 foreach (int dimention in Dimentions)
                 {
-                    Console.WriteLine("Dimentin {0}...", dimention);
+                    if(!FromFile) { Console.WriteLine("Dimentin {0}...", dimention); }
+
                     var testResult = GetOneTestResult(gridSideSize, dimention);
                     testResults.Add(testResult);
                 }
             }
             SaveTestResults(testResults);
-            Console.WriteLine("End.");
+            Console.WriteLine("Finished!");
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
@@ -54,17 +66,30 @@ namespace PerformanceMeasurement
         {
             TestResult testResult = new TestResult(Iterations, string.Format("{0}X{1}", gridSideSize, gridSideSize), dimention);
 
-            SomProcessorsFactory somProcessorsFactory = new SomProcessorsFactory(Iterations, dimention, gridSideSize, 0.07);
+            SomProcessorsFactory somProcessorsFactory = new SomProcessorsFactory(Iterations, dimention, gridSideSize, 0.07, FromFile, FileName);
 
-            SomLearningProcessor somLearningProcessor = somProcessorsFactory.GetStandardLearningProcessor();
-            double timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+            ILearningProcessor somLearningProcessor = null;
+            double timeForAlgo = 0;
+
+            somLearningProcessor = somProcessorsFactory.GetStandardLearningProcessor();
+            timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
             testResult.TimeStat.Add(new AlgorithmTime("Standard", timeForAlgo));
             Console.WriteLine("Standard:{0}", timeForAlgo);
 
-            somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor();
+            somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(2);
             timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
-            testResult.TimeStat.Add(new AlgorithmTime("Paralleled", timeForAlgo));
-            Console.WriteLine("Paralleled:{0}", timeForAlgo);
+            testResult.TimeStat.Add(new AlgorithmTime("Paralleled, 2Thrs:", timeForAlgo));
+            Console.WriteLine("Paralleled, 2Thrs: {0}", timeForAlgo);
+
+            //somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(4);
+            //timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+            //testResult.TimeStat.Add(new AlgorithmTime("Paralleled, 4Thrs:", timeForAlgo));
+            //Console.WriteLine("Paralleled, 4Thrs: {0}", timeForAlgo);
+
+            //somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(8);
+            //timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+            //testResult.TimeStat.Add(new AlgorithmTime("Paralleled, 8Thrs:", timeForAlgo));
+            //Console.WriteLine("Paralleled, 8Thrs: {0}", timeForAlgo);
 
             return testResult;
         }
@@ -75,6 +100,9 @@ namespace PerformanceMeasurement
             double averageTime = 0.0;
             for (int i = 0; i < Tests; i++)
             {
+                // collect garbage now to minimize interference
+                GC.Collect();
+
                 double timeForStandardAlgo = GetTimeForExecutingLearn(somLearningProcessor);
                 averageTime += timeForStandardAlgo * mult;
             }
@@ -96,6 +124,9 @@ namespace PerformanceMeasurement
         public int Iterations { get; private set; }
         public List<int> Dimentions { get; private set; }
         public List<int> Grids { get; private set; }
+        protected List<int> ThreadNumbers { get; set; }
+        protected string FileName { get; set; }
+        protected bool FromFile { get; set; }
 
         private void ReadConfiguration()
         {
@@ -115,8 +146,17 @@ namespace PerformanceMeasurement
             {
                 Grids.Add(Int32.Parse(grid));
             }
-        }
 
+            string threadsString = ConfigurationSettings.AppSettings["Threads"];
+            string[] threads = threadsString.Split(',');
+            ThreadNumbers = new List<int>();
+            foreach (string threadNum in threads)
+            {
+                ThreadNumbers.Add(Int32.Parse(threadNum));
+            }
+            FromFile = Boolean.Parse(ConfigurationSettings.AppSettings["FromFile"]);
+            FileName = ConfigurationSettings.AppSettings["FileName"];
+        }
 
     }
 }

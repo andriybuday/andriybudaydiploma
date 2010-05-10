@@ -62,9 +62,9 @@ namespace Som.Network
 
         public double[] Weights { get; set; }
 
-        public double GetReaction(IList<double> inputVector)
+        public double GetReaction(double[] inputVector)
         {
-            if(Weights.Length != inputVector.Count) throw new ArgumentException("Input vector length should be equal to current neuron Weights vector length.");
+            if(Weights.Length != inputVector.Length) throw new ArgumentException("Input vector length should be equal to current neuron Weights vector length.");
 
             double sum = 0;
 

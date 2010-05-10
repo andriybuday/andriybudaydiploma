@@ -25,7 +25,7 @@ namespace Som.Application.SomExtensions
         public ILearningDataProvider LearningDataProvider { get; set; }
         public IMetricFunction MetricFunction { get; set; }
 
-        public SomLearningProcessor GetSomProcessor()
+        public ILearningProcessor GetSomProcessor()
         {
             var iterations = (int)numericUpDownIterations.Value;
             var startLearningRate = 0.07;
@@ -68,7 +68,7 @@ namespace Som.Application.SomExtensions
             INeighbourhoodFunction neighbourhoodFunction = new GaussNeighbourhoodFunction();
             IShuffleProvider shuffleProvider = new NotShufflingProvider();
 
-            SomLearningProcessor somLearningProcessor;
+            ILearningProcessor somLearningProcessor;
             if(comboBoxProcessorType.SelectedIndex == 0)
             {
                 somLearningProcessor = new SomLearningProcessor(LearningDataProvider, network, MetricFunction, learningFactorFunction,
@@ -76,8 +76,8 @@ namespace Som.Application.SomExtensions
             }
             else
             {
-                somLearningProcessor = new ConcurrencySomLearningProcessor(LearningDataProvider, network, MetricFunction, learningFactorFunction,
-                                                                    neighbourhoodFunction, iterations, shuffleProvider);
+                somLearningProcessor = new DivideGridAndAccomodationArea(LearningDataProvider, network, MetricFunction, learningFactorFunction,
+                                                                    neighbourhoodFunction, iterations, shuffleProvider, 4);
             }
             return somLearningProcessor;
         }

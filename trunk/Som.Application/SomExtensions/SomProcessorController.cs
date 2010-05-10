@@ -12,9 +12,9 @@ namespace Som.Application.SomExtensions
         public IList<double> BestMatchingNeuronWeights { get; private set; }
         public double[] DataVector { get; private set; }
 
-        public SomLearningProcessor LearningProcessor { get; private set; }
+        public ILearningProcessor LearningProcessor { get; private set; }
 
-        public SomProcessorController(SomLearningProcessor learningProcessor)
+        public SomProcessorController(ILearningProcessor learningProcessor)
         {
             LearningProcessor = learningProcessor;
             Reset();

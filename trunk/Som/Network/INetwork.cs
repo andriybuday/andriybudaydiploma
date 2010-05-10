@@ -6,7 +6,7 @@ namespace Som.Network
 {
     public interface INetwork
     {
-        IList<INeuron> Neurons { get; set; }
+        INeuron[] Neurons { get; set; }
 
         ITopology Topology { get; set; }
     }

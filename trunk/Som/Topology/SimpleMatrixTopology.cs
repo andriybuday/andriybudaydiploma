@@ -12,6 +12,8 @@ namespace Som.Topology
         public int ColCount { get; private set; }
         public double WholeTopologyRadius { get; private set; }
 
+        public double[] DistancesToWinner { get; private set; }
+
         public SimpleMatrixTopology(int rowCount, int colCount)
         {
             ColCount = colCount;
@@ -19,7 +21,7 @@ namespace Som.Topology
             _n = RowCount*ColCount;
             //var bitArray = new BitArray(NeuronsCount, false);
             //bitArray.
-
+            DistancesToWinner = new double[NeuronsCount];
 
             WholeTopologyRadius = Math.Max(ColCount, RowCount) / 2.0;
         }
@@ -52,10 +54,10 @@ namespace Som.Topology
             return result;
         }
 
-        public Dictionary<int, double> GetNeuronsInRadius(int neuronNumber, double radius)
+        public List<int> GetNeuronsInRadius(int neuronNumber, double radius)
         {
             //return Slow_GetNeuronsInRadius(neuronNumber, radius);
-            return Fast_SquarNeibo(neuronNumber, radius);
+            return FindNeiboInCycleFastSearch(neuronNumber, radius);
 
         }
 
@@ -70,9 +72,9 @@ namespace Som.Topology
             return (colDiff*colDiff + rowDiff*rowDiff) < (radius*radius);
         }
 
-        public Dictionary<int, double> Fast_SquarNeibo(int neuronNumber, double radius)
+        public List<int> FindNeiboInCycleFastSearch(int neuronNumber, double radius)
         {
-            var result = new Dictionary<int, double>();
+            var result = new List<int>();
 
             var nColPos = neuronNumber % ColCount;
             var nRowPos = neuronNumber / ColCount;
@@ -99,7 +101,8 @@ namespace Som.Topology
                     var currDist = GetDistance(col, row, nColPos, nRowPos);
                     if (currDist < radius)
                     {
-                        result.Add(row * ColCount + col, currDist);
+                        result.Add(row * ColCount + col);
+                        DistancesToWinner[row*ColCount + col] = currDist;
                     }
                 }
             }
@@ -107,14 +110,14 @@ namespace Som.Topology
             return result;
         }
 
-        public Dictionary<int, double> Slow_GetNeuronsInRadius(int neuronNumber, double radius)
+        public List<int> Slow_GetNeuronsInRadius(int neuronNumber, double radius)
         {
             var neuronsCount = RowCount * ColCount;
 
             var neuronColPos = neuronNumber % ColCount;
             var neuronRowPos = neuronNumber / ColCount;
 
-            var result = new Dictionary<int, double>();
+            var result = new List<int>();
 
             for (int col = 0; col < ColCount; col++)
             {
@@ -123,7 +126,8 @@ namespace Som.Topology
                     var currDist = GetDistance(col, row, neuronColPos, neuronRowPos);
                     if (currDist < radius)
                     {
-                        result.Add(row * ColCount + col, currDist);
+                        result.Add(row * ColCount + col);
+                        DistancesToWinner[row * ColCount + col] = currDist;
                     }
                 }
             }

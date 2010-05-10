@@ -26,7 +26,7 @@ namespace Som.Application.Grid
         public SomProcessorController ProcessorController { get; private set; }
         public ILearningDataProvider DataProvider { get; private set; }
 
-        public void InitializeSom(SomLearningProcessor processorController, ILearningDataProvider dataProvider)
+        public void InitializeSom(ILearningProcessor processorController, ILearningDataProvider dataProvider)
         {
             ProcessorController = new SomProcessorController(processorController);
             DataProvider = dataProvider;

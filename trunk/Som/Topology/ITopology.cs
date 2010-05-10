@@ -12,6 +12,7 @@ namespace Som.Topology
         int ColCount { get; }
         
         double WholeTopologyRadius { get; }
+        double[] DistancesToWinner { get; }
 
         int GetNeuronNumber(Location location);
         
@@ -19,7 +20,7 @@ namespace Som.Topology
 
         IList<int> GetDirectlyConnectedNeurons(int neuronNumber);
 
-        Dictionary<int, double> GetNeuronsInRadius(int neuronNumber, double radius);
+        List<int> GetNeuronsInRadius(int neuronNumber, double radius);
 
         bool Overlaps(int neuronA, int neuronB, double radius);
     }

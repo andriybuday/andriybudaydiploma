@@ -8,7 +8,7 @@ namespace Som.Application
     class Program
     {
         [STAThread]
-        [MTAThread]
+        //[MTAThread]
         static void Main(string[] args)
         {
 
