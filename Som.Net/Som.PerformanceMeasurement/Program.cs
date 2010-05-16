@@ -15,6 +15,13 @@ namespace PerformanceMeasurement
         {
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
+            //int completionPortThreads;
+            //int workerThreads;
+            //ThreadPool.GetMaxThreads(out workerThreads, out completionPortThreads);
+
+            //ThreadPool.SetMaxThreads(50, 1000);
+            //ThreadPool.
+
             // collect garbage now to minimize interference
             GC.Collect();
 
@@ -81,10 +88,15 @@ namespace PerformanceMeasurement
             testResult.TimeStat.Add(new AlgorithmTime("Paralleled, 2Thrs:", timeForAlgo));
             Console.WriteLine("Paralleled, 2Thrs: {0}", timeForAlgo);
 
-            //somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(4);
+            //somLearningProcessor = somProcessorsFactory.GetTrainsProcessor(2);
             //timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
-            //testResult.TimeStat.Add(new AlgorithmTime("Paralleled, 4Thrs:", timeForAlgo));
-            //Console.WriteLine("Paralleled, 4Thrs: {0}", timeForAlgo);
+            //testResult.TimeStat.Add(new AlgorithmTime("Trains, 2Thrs:", timeForAlgo));
+            //Console.WriteLine("Tains, 2Thrs: {0}", timeForAlgo);
+
+            somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(4);
+            timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+            testResult.TimeStat.Add(new AlgorithmTime("Paralleled, 4Thrs:", timeForAlgo));
+            Console.WriteLine("Paralleled, 4Thrs: {0}", timeForAlgo);
 
             //somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(8);
             //timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Som.Concurrency;
 using Som.Data;
 using Som.Data.Shuffle;
 using Som.Learning;
@@ -66,6 +67,8 @@ namespace Som.LearningProcessor
             FindBestNeuronRequests = new FindBestNeuronRequest[GridGroups];
             AccomodateNetworkRequests = new AccomodateNetworkRequest[GridGroups];
 
+            
+
             SetStartEndParams();
         }
 
@@ -127,13 +130,14 @@ namespace Som.LearningProcessor
             int result = -1;
             CurrentDataVector = dataVector;
             _executedThreadsCounter = 0;
-            for (int i = 0; i < GridGroups; i++)
+            for (int i = 1; i < GridGroups; i++)
             {
                 ThreadPool.UnsafeQueueUserWorkItem(AsynchronousFindBestMatchingNeuron, i);
             }
-            
+            AsynchronousFindBestMatchingNeuron(0);
+
             //joining threads
-            for (int i = 0; i < GridGroups; i++) DoneEvents[i].WaitOne();
+            for (int i = 1; i < GridGroups; i++) DoneEvents[i].WaitOne();
 
             Double minDistance = Double.MaxValue;
             for (int i = 0; i < GridGroups; i++)
@@ -169,17 +173,22 @@ namespace Som.LearningProcessor
                     AccomodateNetworkRequests[i].EffectedNeurons = effectedNeurons;
                     AccomodateNetworkRequests[i].DoneEvent = DoneEvents[i];
 
-                    ThreadPool.UnsafeQueueUserWorkItem(AsynchronousAccommodateNetworkWeights, i);
-
                     start = end;
                     end += sectionLength;
                     if (i == GridGroups - 1) end = effectedNeuronsCount;
                 }
 
-                //joining threads
-                for (int i = 0; i < GridGroups; i++)
+                for (int i = 1; i < GridGroups; i++)
                 {
-                    DoneEvents[i].WaitOne();
+                    ThreadPool.UnsafeQueueUserWorkItem(AsynchronousAccommodateNetworkWeights, i);
+                }
+                AsynchronousAccommodateNetworkWeights(0);
+
+                //AsynchronousAccommodateNetworkWeights(0);
+                //joining threads
+                for (int i = 1; i < GridGroups; i++)
+                {
+                    AccomodateNetworkRequests[i].DoneEvent.WaitOne();
                 }
             }
             else
@@ -238,24 +247,6 @@ namespace Som.LearningProcessor
         private FindBestNeuronRequest[] FindBestNeuronRequests;
         private AccomodateNetworkRequest[] AccomodateNetworkRequests;
         private double[] CurrentDataVector;
-        private double CurrentLearningRate;
-
-        private struct AccomodateNetworkRequest
-        {
-            public int Iteration;
-            public double Radius;
-            public int Start;
-            public int End;
-            public List<int> EffectedNeurons;
-            public AutoResetEvent DoneEvent;
-        }
-
-        private struct FindBestNeuronRequest
-        {
-            public int Start;
-            public int End;
-            public AutoResetEvent DoneEvent;
-        }
-        
+        private double CurrentLearningRate;        
     }
 }
