@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Som.ActivationFunction;
 using Som.Application.Base;
+using Som.Concurrency;
 using Som.Data.Shuffle;
 using Som.Learning;
 using Som.Data;

@@ -77,7 +77,7 @@ namespace Som.Application.SomExtensions
             else
             {
                 somLearningProcessor = new DivideGridAndAccomodationArea(LearningDataProvider, network, MetricFunction, learningFactorFunction,
-                                                                    neighbourhoodFunction, iterations, shuffleProvider, 4);
+                                                                    neighbourhoodFunction, iterations, shuffleProvider, 2);
             }
             return somLearningProcessor;
         }
