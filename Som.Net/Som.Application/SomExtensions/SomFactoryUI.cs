@@ -20,7 +20,7 @@ namespace Som.Application.SomExtensions
         {
             InitializeComponent();
             comboBoxProcessorType.SelectedIndex = 0;
-            comboBoxDataProvider.SelectedIndex = 0;
+            comboBoxDataProvider.SelectedIndex = 2;
         }
 
         public ILearningDataProvider LearningDataProvider { get; set; }

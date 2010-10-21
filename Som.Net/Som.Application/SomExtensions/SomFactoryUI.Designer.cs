@@ -127,8 +127,8 @@
             // 
             this.comboBoxProcessorType.FormattingEnabled = true;
             this.comboBoxProcessorType.Items.AddRange(new object[] {
-            "Класичний",
-            "Масштабований"});
+            "Classic",
+            "Paralleled"});
             this.comboBoxProcessorType.Location = new System.Drawing.Point(105, 19);
             this.comboBoxProcessorType.Name = "comboBoxProcessorType";
             this.comboBoxProcessorType.Size = new System.Drawing.Size(118, 21);

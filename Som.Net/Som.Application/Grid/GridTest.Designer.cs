@@ -111,6 +111,8 @@
             // checkBoxShowGirl
             // 
             this.checkBoxShowGirl.AutoSize = true;
+            this.checkBoxShowGirl.Checked = true;
+            this.checkBoxShowGirl.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxShowGirl.Location = new System.Drawing.Point(145, 277);
             this.checkBoxShowGirl.Name = "checkBoxShowGirl";
             this.checkBoxShowGirl.Size = new System.Drawing.Size(73, 17);
@@ -152,6 +154,7 @@
             // 
             // buttonRun
             // 
+            this.buttonRun.ForeColor = System.Drawing.Color.Green;
             this.buttonRun.Location = new System.Drawing.Point(13, 365);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(54, 23);
@@ -166,6 +169,7 @@
             // 
             // buttonStop
             // 
+            this.buttonStop.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.buttonStop.Location = new System.Drawing.Point(84, 365);
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.Size = new System.Drawing.Size(54, 23);
@@ -234,7 +238,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(686, 473);
             this.Name = "GridTest";
-            this.Text = "Testing SOM";
+            this.Text = "Testing SOM (visualization of learning process)";
             this.Load += new System.EventHandler(this.GridTest_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIterationsPerOnce)).EndInit();
             this._splitContainerMain.Panel1.ResumeLayout(false);
