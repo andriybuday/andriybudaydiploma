@@ -20,7 +20,7 @@ namespace Som.Application.Grid
         public GridConnDrawer()
         {
             DotBrush = Brushes.Red;
-            DotSize = 4;
+            DotSize = 3;
             HalfDotSize = DotSize/2;
             LinePen = new Pen(Color.Black, DotSize-2 > 1 ? DotSize-2 : 1);
         }

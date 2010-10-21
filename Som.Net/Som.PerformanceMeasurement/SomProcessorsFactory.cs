@@ -8,6 +8,7 @@ using Som.Learning;
 using Som.LearningProcessor;
 using Som.Metrics;
 using Som.Network;
+using Som.StandardDividing;
 using Som.Topology;
 
 namespace PerformanceMeasurement
@@ -42,7 +43,7 @@ namespace PerformanceMeasurement
             }
             else
             {
-                LearningDataProvider = new CompletelyRandomDataProvider(dimentions, 150);
+                LearningDataProvider = new CompletelyRandomDataProvider(dimentions, 50);
             }
 
             int dataVectorDimention = LearningDataProvider.DataVectorDimention;
@@ -65,7 +66,18 @@ namespace PerformanceMeasurement
         }
 
 
+        public ILearningProcessor GetOnlineV2()
+        {
+            var standardSomLearningProcessor = new StandardSomLearningProcessor(LearningDataProvider, Network, metricFunction, learningFactorFunction,
+                                                                                neighbourhoodFunction, Iterations, shuffleProvider);
+            return standardSomLearningProcessor;
+        }
 
+        public ILearningProcessor GetParalleledV2(int gridGroups)
+        {
+            var standardSomLearningProcessor = new DivideGridV2(LearningDataProvider, Network, metricFunction, learningFactorFunction, neighbourhoodFunction, Iterations, shuffleProvider, gridGroups);
+            return standardSomLearningProcessor;
+        }
 
         public ILearningProcessor GetStandardLearningProcessor()
         {

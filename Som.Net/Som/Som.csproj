@@ -56,10 +56,13 @@
     <Compile Include="ActivationFunction\HardLimitActivationFunction.cs" />
     <Compile Include="ActivationFunction\IActivationFunction.cs" />
     <Compile Include="Concurrency\AccomodateNetworkRequest.cs" />
+    <Compile Include="Concurrency\TaskExtentionsSomProcessor.cs" />
     <Compile Include="Concurrency\DivideGridAndAccomodationArea.cs" />
     <Compile Include="Concurrency\FindBestNeuronRequest.cs" />
     <Compile Include="Concurrency\SimpleMatrixTopology.cs" />
     <Compile Include="Concurrency\TrainsSomProcessor.cs" />
+    <Compile Include="StandardDividing\StandardSomLearningProcessor.cs" />
+    <Compile Include="StandardDividing\DivideGridV2.cs" />
     <Compile Include="Data\CompletelyRandomDataProvider.cs" />
     <Compile Include="Data\DirectDataProvider.cs" />
     <Compile Include="Data\Shuffle\IShuffleProvider.cs" />

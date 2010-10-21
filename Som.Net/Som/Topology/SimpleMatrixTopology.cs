@@ -110,32 +110,6 @@ namespace Som.Topology
             return result;
         }
 
-        public List<int> Slow_GetNeuronsInRadius(int neuronNumber, double radius)
-        {
-            var neuronsCount = RowCount * ColCount;
-
-            var neuronColPos = neuronNumber % ColCount;
-            var neuronRowPos = neuronNumber / ColCount;
-
-            var result = new List<int>();
-
-            for (int col = 0; col < ColCount; col++)
-            {
-                for (int row = 0; row < RowCount; row++)
-                {
-                    var currDist = GetDistance(col, row, neuronColPos, neuronRowPos);
-                    if (currDist < radius)
-                    {
-                        result.Add(row * ColCount + col);
-                        DistancesToWinner[row * ColCount + col] = currDist;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-
         private double GetDistance(int col, int row, int neuronColPos, int neuronRowPos)
         {
             var xD = (neuronColPos - col);

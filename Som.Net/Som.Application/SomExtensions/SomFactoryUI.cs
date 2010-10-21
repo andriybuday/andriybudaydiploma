@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Som.ActivationFunction;
+using Som.Concurrency;
 using Som.Data;
 using Som.Data.Shuffle;
 using Som.Learning;
 using Som.LearningProcessor;
 using Som.Metrics;
 using Som.Network;
+using Som.StandardDividing;
 using Som.Topology;
 
 namespace Som.Application.SomExtensions
@@ -71,12 +73,12 @@ namespace Som.Application.SomExtensions
             ILearningProcessor somLearningProcessor;
             if(comboBoxProcessorType.SelectedIndex == 0)
             {
-                somLearningProcessor = new SomLearningProcessor(LearningDataProvider, network, MetricFunction, learningFactorFunction,
+                somLearningProcessor = new StandardSomLearningProcessor(LearningDataProvider, network, MetricFunction, learningFactorFunction,
                                                                     neighbourhoodFunction, iterations, shuffleProvider);    
             }
             else
             {
-                somLearningProcessor = new DivideGridAndAccomodationArea(LearningDataProvider, network, MetricFunction, learningFactorFunction,
+                somLearningProcessor = new DivideGridV2(LearningDataProvider, network, MetricFunction, learningFactorFunction,
                                                                     neighbourhoodFunction, iterations, shuffleProvider, 2);
             }
             return somLearningProcessor;
