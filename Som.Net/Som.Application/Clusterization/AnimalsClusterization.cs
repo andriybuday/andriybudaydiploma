@@ -11,7 +11,7 @@ namespace Som.Application.Clusterization
         {
             InitializeComponent();
             Controller = controller;
-            FileName = "Zoo.data";
+            FileName = @"Clusterization/Zoo.data";
             textBoxFileName.Text = FileName;
         }
 
@@ -23,17 +23,18 @@ namespace Som.Application.Clusterization
             {
                 FileName = openFileDialog.FileName;
             }
-            Controller.LoadData(FileName);    
         }
 
         protected AnimalsClusterizationController Controller { get; set; }
 
         private void btnLearn_Click(object sender, EventArgs e)
         {
+            Controller.LoadData(FileName);
             Controller.Learn();
+            DrawMap();
         }
 
-        private void btnDrawMap_Click(object sender, EventArgs e)
+        private void DrawMap()
         {
             var topology = Controller.GetTopology();
             var networkNeurons = Controller.GetNetworkNeurons();
@@ -94,13 +95,6 @@ namespace Som.Application.Clusterization
                 default:
                     return Color.White;
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-         //   btnLoadData_Click(sender, e);
-            btnLearn_Click(sender, e);
-            btnDrawMap_Click(sender, e);
         }
     }
 }

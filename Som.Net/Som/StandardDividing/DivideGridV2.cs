@@ -10,7 +10,7 @@ using Som.Metrics;
 using Som.Network;
 using Som.Topology;
 
-namespace Som.Concurrency
+namespace Som.StandardDividing
 {
     public class DivideGridV2 : ILearningProcessor
     {

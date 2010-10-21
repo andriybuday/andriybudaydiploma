@@ -101,7 +101,9 @@
     <None Include="Clusterization\UrkZoo.data">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Clusterization\Zoo.data" />
+    <None Include="Clusterization\Zoo.data">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Clusterization\AnimalsClusterization.resx">
