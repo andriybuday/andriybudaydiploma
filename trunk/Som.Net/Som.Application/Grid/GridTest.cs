@@ -29,19 +29,19 @@ namespace Som.Application.Grid
 
         private void GridTest_Load(object sender, EventArgs e)
         {
-
+            InitializeSomAndInitialDraw();
         }
 
         public Random Random { get; private set; }
 
         private void buttonInitialize_Click(object sender, EventArgs e)
         {
-            //1l0O
-            //var scale = pictureBoxGridTest.Width < pictureBoxGridTest.Height ? pictureBoxGridTest.Width : pictureBoxGridTest.Height;
+            InitializeSomAndInitialDraw();
+        }
 
-            //GridConnDrawer.Draw(pictureBoxGridTest.CreateGraphics(), scale, points);
+        private void InitializeSomAndInitialDraw()
+        {
             var learningProcessorBase = somFactoryUI.GetSomProcessor();
-
             Controller.InitializeSom(learningProcessorBase, somFactoryUI.LearningDataProvider);
         }
 
