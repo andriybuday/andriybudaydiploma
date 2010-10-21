@@ -26,15 +26,33 @@ namespace PerformanceMeasurement
             GC.Collect();
 
             Program program = new Program();
+
+            var beforeTesting = DateTime.Now;
             program.Run();
+
+            foreach (var s in args)
+            {
+                program.FromFile = true;
+                program.FileName = s;
+                program.Run();
+            }
+            var afterTesting = DateTime.Now;
+            var testingTook = afterTesting.Subtract(beforeTesting);
+            Console.WriteLine("Whole testing took {0}. Thank you for being patient.", testingTook);
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
         }
 
-        private void Run()
+        public Program()
         {
             ReadConfiguration();
-
+        }
+        private void Run()
+        {
             List<TestResult> testResults = new List<TestResult>();
 
+            Console.WriteLine();
+            Console.WriteLine("TEST SET");
             Console.WriteLine("Tries to know average: {0}", Tests);
             Console.WriteLine("Iterations: {0}", Iterations);
             if (FromFile) Console.WriteLine("FromFile: {0}", FileName);
@@ -46,23 +64,34 @@ namespace PerformanceMeasurement
             foreach (int gridSideSize in Grids)
             {
                 Console.WriteLine("Grid {0}X{0}...", gridSideSize);    
-                foreach (int dimention in Dimentions)
-                {
-                    if(!FromFile) { Console.WriteLine("Dimentin {0}...", dimention); }
 
-                    var testResult = GetOneTestResult(gridSideSize, dimention);
+                if(FromFile)
+                {
+                    var testResult = GetOneTestResult(gridSideSize, 0);
                     testResults.Add(testResult);
                 }
+                else
+                {
+                    foreach (int dimention in Dimentions)
+                    {
+                        Console.WriteLine("Dimentin {0}...", dimention);
+
+                        var testResult = GetOneTestResult(gridSideSize, dimention);
+                        testResults.Add(testResult);
+                    }    
+                }
+                
             }
-            SaveTestResults(testResults);
-            Console.WriteLine("Finished!");
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+            Console.WriteLine("Saving to file...");
+            //SaveTestResults(testResults);
+            //Console.WriteLine("TEST SET finished. Will be closed in 3 seconds...");
+            //Thread.Sleep(3000);
+            //Console.ReadKey();
         }
 
         private void SaveTestResults(List<TestResult> testResults)
         {
-            string fileName = string.Format("ResultsFor_{0}_{1}_{2}_{3}_{4}.xml", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute);
+            string fileName = string.Format("ResultsFor_{0}_{1}_{2}_{3}_{4}_{5}.xml", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
             StreamWriter streamWriter = File.CreateText(fileName);
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<TestResult>));
             xmlSerializer.Serialize(streamWriter,testResults);
@@ -78,25 +107,53 @@ namespace PerformanceMeasurement
             ILearningProcessor somLearningProcessor = null;
             double timeForAlgo = 0;
 
-            somLearningProcessor = somProcessorsFactory.GetStandardLearningProcessor();
-            timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
-            testResult.TimeStat.Add(new AlgorithmTime("Standard", timeForAlgo));
-            Console.WriteLine("Standard:{0}", timeForAlgo);
 
             somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(2);
             timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
-            testResult.TimeStat.Add(new AlgorithmTime("Paralleled, 2Thrs:", timeForAlgo));
-            Console.WriteLine("Paralleled, 2Thrs: {0}", timeForAlgo);
+            testResult.TimeStat.Add(new AlgorithmTime(string.Format("Paralleled (v1), {0} Thrs", 2), timeForAlgo));
+            Console.WriteLine("Paralleled (v1), {1} Thrs: {0}", timeForAlgo, 2);    
+
+            /*
+            somLearningProcessor = somProcessorsFactory.GetStandardLearningProcessor();
+            timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+            testResult.TimeStat.Add(new AlgorithmTime("On-line (v1)", timeForAlgo));
+            Console.WriteLine("On-line (v1):{0}", timeForAlgo);
+
+            for (int i = 0; i < ThreadNumbers.Count; i++)
+            {
+                somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(ThreadNumbers[i]);
+                timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+                testResult.TimeStat.Add(new AlgorithmTime(string.Format("Paralleled (v1), {0} Thrs", ThreadNumbers[i]), timeForAlgo));
+                Console.WriteLine("Paralleled (v1), {1} Thrs: {0}", timeForAlgo, ThreadNumbers[i]);    
+            }
+            */
+
+
+            /// Version 2
+            /*
+            somLearningProcessor = somProcessorsFactory.GetOnlineV2();
+            timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+            testResult.TimeStat.Add(new AlgorithmTime("On-line (v2)", timeForAlgo));
+            Console.WriteLine("On-line (v2):{0}", timeForAlgo);
+
+            for (int i = 0; i < ThreadNumbers.Count; i++)
+            {
+                somLearningProcessor = somProcessorsFactory.GetParalleledV2(ThreadNumbers[i]);
+                timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+                testResult.TimeStat.Add(new AlgorithmTime(string.Format("Paralleled (v2), {0} Thrs", ThreadNumbers[i]), timeForAlgo));
+                Console.WriteLine("Paralleled (v2), {1} Thrs: {0}", timeForAlgo, ThreadNumbers[i]);
+            }
+            */
 
             //somLearningProcessor = somProcessorsFactory.GetTrainsProcessor(2);
             //timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
             //testResult.TimeStat.Add(new AlgorithmTime("Trains, 2Thrs:", timeForAlgo));
             //Console.WriteLine("Tains, 2Thrs: {0}", timeForAlgo);
 
-            somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(4);
-            timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
-            testResult.TimeStat.Add(new AlgorithmTime("Paralleled, 4Thrs:", timeForAlgo));
-            Console.WriteLine("Paralleled, 4Thrs: {0}", timeForAlgo);
+            //somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(4);
+            //timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
+            //testResult.TimeStat.Add(new AlgorithmTime("Paralleled, 4Thrs:", timeForAlgo));
+            //Console.WriteLine("Paralleled, 4Thrs: {0}", timeForAlgo);
 
             //somLearningProcessor = somProcessorsFactory.GetParallelLearningProcessor(8);
             //timeForAlgo = GetAverageTimeForAlgo(somLearningProcessor, testResult);
