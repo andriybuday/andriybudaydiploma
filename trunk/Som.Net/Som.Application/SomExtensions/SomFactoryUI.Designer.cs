@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBoxContainer = new System.Windows.Forms.GroupBox();
+            this.numericUpDownInputSpaceNumber = new System.Windows.Forms.NumericUpDown();
             this.labelDataProvier = new System.Windows.Forms.Label();
             this.comboBoxDataProvider = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -42,12 +43,11 @@
             this.numericUpDownColumns = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownRows = new System.Windows.Forms.NumericUpDown();
             this.labelTopology = new System.Windows.Forms.Label();
-            this.numericUpDownInputSpaceNumber = new System.Windows.Forms.NumericUpDown();
             this.groupBoxContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputSpaceNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIterations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownColumns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRows)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputSpaceNumber)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxContainer
@@ -72,7 +72,24 @@
             this.groupBoxContainer.Size = new System.Drawing.Size(236, 265);
             this.groupBoxContainer.TabIndex = 0;
             this.groupBoxContainer.TabStop = false;
-            this.groupBoxContainer.Text = "Параметри SOM";
+            this.groupBoxContainer.Text = "Parameters SOM";
+            // 
+            // numericUpDownInputSpaceNumber
+            // 
+            this.numericUpDownInputSpaceNumber.Location = new System.Drawing.Point(105, 205);
+            this.numericUpDownInputSpaceNumber.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numericUpDownInputSpaceNumber.Name = "numericUpDownInputSpaceNumber";
+            this.numericUpDownInputSpaceNumber.Size = new System.Drawing.Size(118, 20);
+            this.numericUpDownInputSpaceNumber.TabIndex = 13;
+            this.numericUpDownInputSpaceNumber.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             // 
             // labelDataProvier
             // 
@@ -80,17 +97,17 @@
             this.labelDataProvier.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelDataProvier.Location = new System.Drawing.Point(17, 181);
             this.labelDataProvier.Name = "labelDataProvier";
-            this.labelDataProvier.Size = new System.Drawing.Size(58, 13);
+            this.labelDataProvier.Size = new System.Drawing.Size(57, 13);
             this.labelDataProvier.TabIndex = 12;
-            this.labelDataProvier.Text = "Вхідні дані";
+            this.labelDataProvier.Text = "Input Data";
             // 
             // comboBoxDataProvider
             // 
             this.comboBoxDataProvider.FormattingEnabled = true;
             this.comboBoxDataProvider.Items.AddRange(new object[] {
-            "Випадково",
-            "Файл",
-            "Силует"});
+            "Random",
+            "File",
+            "Silhouette"});
             this.comboBoxDataProvider.Location = new System.Drawing.Point(105, 178);
             this.comboBoxDataProvider.Name = "comboBoxDataProvider";
             this.comboBoxDataProvider.Size = new System.Drawing.Size(118, 21);
@@ -102,9 +119,9 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label4.Location = new System.Drawing.Point(17, 22);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(85, 13);
+            this.label4.Size = new System.Drawing.Size(58, 13);
             this.label4.TabIndex = 10;
-            this.label4.Text = "Тип алгоритму:";
+            this.label4.Text = "Algo Type:";
             // 
             // comboBoxProcessorType
             // 
@@ -123,9 +140,9 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label3.Location = new System.Drawing.Point(17, 79);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 13);
+            this.label3.Size = new System.Drawing.Size(80, 13);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Навч. коеф:";
+            this.label3.Text = "Learnign Rate.:";
             // 
             // textBoxLearningRate
             // 
@@ -158,18 +175,18 @@
             this.labelIterations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelIterations.Location = new System.Drawing.Point(17, 49);
             this.labelIterations.Name = "labelIterations";
-            this.labelIterations.Size = new System.Drawing.Size(47, 13);
+            this.labelIterations.Size = new System.Drawing.Size(53, 13);
             this.labelIterations.TabIndex = 5;
-            this.labelIterations.Text = "Ітерацій";
+            this.labelIterations.Text = "Iterations:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(172, 99);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 13);
+            this.label2.Size = new System.Drawing.Size(22, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Кол.";
+            this.label2.Text = "Col";
             // 
             // label1
             // 
@@ -178,7 +195,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(29, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Ряд.";
+            this.label1.Text = "Row";
             // 
             // numericUpDownColumns
             // 
@@ -220,26 +237,9 @@
             this.labelTopology.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelTopology.Location = new System.Drawing.Point(17, 117);
             this.labelTopology.Name = "labelTopology";
-            this.labelTopology.Size = new System.Drawing.Size(57, 13);
+            this.labelTopology.Size = new System.Drawing.Size(51, 13);
             this.labelTopology.TabIndex = 0;
-            this.labelTopology.Text = "Топологія";
-            // 
-            // numericUpDownInputSpaceNumber
-            // 
-            this.numericUpDownInputSpaceNumber.Location = new System.Drawing.Point(105, 205);
-            this.numericUpDownInputSpaceNumber.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numericUpDownInputSpaceNumber.Name = "numericUpDownInputSpaceNumber";
-            this.numericUpDownInputSpaceNumber.Size = new System.Drawing.Size(118, 20);
-            this.numericUpDownInputSpaceNumber.TabIndex = 13;
-            this.numericUpDownInputSpaceNumber.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
+            this.labelTopology.Text = "Topology";
             // 
             // SomFactoryUI
             // 
@@ -250,10 +250,10 @@
             this.Size = new System.Drawing.Size(236, 265);
             this.groupBoxContainer.ResumeLayout(false);
             this.groupBoxContainer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputSpaceNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIterations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownColumns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRows)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputSpaceNumber)).EndInit();
             this.ResumeLayout(false);
 
         }
